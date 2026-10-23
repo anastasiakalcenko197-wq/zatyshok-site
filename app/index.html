@@ -1,0 +1,1268 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Затишок — тестова версія</title>
+<meta name="theme-color" content="#1b1614"><meta name="apple-mobile-web-app-capable" content="yes"><link rel="apple-touch-icon" href="../icon.png"><link rel="icon" href="../icon.png">
+<style>#minB,#closeB,#wzMin{display:none!important} html,body{height:100%} @media(min-width:700px){body{max-width:560px;margin:0 auto!important;position:relative;box-shadow:0 0 0 1px #0004}}</style>
+<style>
+@font-face{font-family:"Tenor Sans";src:url(fonts/tenor-sans-cyrillic-400-normal.woff2) format("woff2");unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
+@font-face{font-family:"Tenor Sans";src:url(fonts/tenor-sans-latin-400-normal.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:"Nunito";font-weight:400;src:url(fonts/nunito-cyrillic-400-normal.woff2) format("woff2");unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
+@font-face{font-family:"Nunito";font-weight:400;src:url(fonts/nunito-latin-400-normal.woff2) format("woff2");unicode-range:U+0000-00FF,U+2000-206F,U+20AC,U+2122,U+2212}
+@font-face{font-family:"Nunito";font-weight:600;src:url(fonts/nunito-cyrillic-600-normal.woff2) format("woff2");unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
+@font-face{font-family:"Nunito";font-weight:600;src:url(fonts/nunito-latin-600-normal.woff2) format("woff2");unicode-range:U+0000-00FF,U+2000-206F,U+20AC,U+2122,U+2212}
+@font-face{font-family:"Nunito";font-weight:700;src:url(fonts/nunito-cyrillic-700-normal.woff2) format("woff2");unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
+@font-face{font-family:"Nunito";font-weight:700;src:url(fonts/nunito-latin-700-normal.woff2) format("woff2");unicode-range:U+0000-00FF,U+2000-206F,U+20AC,U+2122,U+2212}
+@font-face{font-family:"Marck Script";src:url(fonts/marck-script-cyrillic-400-normal.woff2) format("woff2");unicode-range:U+0400-045F,U+0490-0491,U+04B0-04B1}
+@font-face{font-family:"Marck Script";src:url(fonts/marck-script-latin-400-normal.woff2) format("woff2");unicode-range:U+0000-00FF,U+2000-206F}
+</style>
+</head>
+<body>
+<style>
+/* Layout: one compact card (widget) that expands into the full list; settings slide over the same card. Old Money dark palette. */
+:root{
+  --on-wine:#EAE0D0;
+  --bg:#141010; --card:#1E1816; --field:#171211; --ink:#EAE0D0; --muted:#9B8D7D; --faint:#6F6259; --line:#352B27;
+  --gold:#B49A6C; --gold-hi:#D1B47E; --wine:#7A2A3A; --wine-hi:#93354A; --olive:#8C8A5E; --olive-soft:rgba(140,138,94,.16); --danger:#E07B7B;
+  --f-display:"Tenor Sans",Georgia,serif; --f-body:"Nunito","Segoe UI",system-ui,sans-serif;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{background:var(--card);color:var(--ink);font:14px/1.5 var(--f-body);overflow:hidden;user-select:none;border:1px solid var(--line)}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--gold);outline-offset:1px}
+.app{display:flex;flex-direction:column;height:100%}
+/* header */
+.head{display:flex;align-items:center;gap:10px;padding:12px 12px 10px 14px;border-bottom:1px solid var(--line)}
+#dragbar{flex:1;display:flex;align-items:center;gap:10px;min-width:0;cursor:default}
+.me{width:46px;height:46px;flex:none;border-radius:50%;background:var(--wine);display:grid;place-items:center;font-family:var(--f-display);color:var(--on-wine);font-size:22px;box-shadow:0 0 0 1.5px var(--gold);overflow:hidden;cursor:pointer;border:0;padding:0}
+.me img{width:100%;height:100%;object-fit:cover}
+.me.sticker{background:none;box-shadow:none;border-radius:0;width:52px;height:52px}
+.me.sticker img{object-fit:contain}
+.titles{min-width:0;cursor:pointer}
+.titles b{display:block;font-family:var(--f-title,var(--f-display));font-weight:400;font-size:17px;letter-spacing:.1em;color:var(--gold);line-height:1.15;white-space:nowrap}
+.titles span{font-size:12px;color:var(--muted);white-space:nowrap}
+.tools{display:flex;gap:2px}
+.ic{border:0;background:transparent;color:var(--muted);width:26px;height:26px;border-radius:7px;display:grid;place-items:center;font-size:13px;padding:0}
+.ic:hover{color:var(--gold);background:rgba(180,154,108,.1)}
+.ic[aria-pressed=true]{color:var(--gold)}
+/* list */
+.scroll{flex:1;overflow:auto;padding:4px 14px 10px}
+.scroll::-webkit-scrollbar{width:8px}.scroll::-webkit-scrollbar-thumb{background:var(--line);border-radius:8px}
+.sec{font-family:var(--f-display);font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin:14px 0 4px;display:flex;justify-content:space-between}
+.sec .n{color:var(--faint);font-family:var(--f-body);letter-spacing:0}
+.it{display:grid;grid-template-columns:auto 1fr auto;gap:9px;align-items:start;padding:7px 0;border-bottom:1px solid var(--line)}
+.it:last-child{border-bottom:0}
+.ck{width:18px;height:18px;border-radius:5px;border:1.5px solid var(--olive);background:transparent;margin-top:2px;padding:0;display:grid;place-items:center}
+.done .ck{background:var(--olive)}
+.done .ck::after{content:"";width:8px;height:4px;border-left:2px solid var(--card);border-bottom:2px solid var(--card);transform:rotate(-45deg) translate(1px,-1px)}
+.tx{min-width:0;overflow-wrap:anywhere;user-select:text}
+.done .tx .t{color:var(--muted);text-decoration:line-through;text-decoration-color:var(--gold)}
+.meta{display:flex;flex-wrap:wrap;gap:4px 8px;font-size:11.5px;color:var(--faint);margin-top:2px}
+.chip{background:var(--olive-soft);color:var(--olive);border-radius:5px;padding:0 6px;font-weight:700}
+.rem{color:var(--gold)}.rem.due{color:var(--gold-hi);font-weight:700}
+.ai{color:var(--gold)}
+.acts{display:flex;gap:0;opacity:.55}
+.it:hover .acts{opacity:1}
+.sun{color:var(--faint)}.sun.on{color:var(--gold-hi)}
+.edit{width:100%;border:1px solid var(--gold);background:var(--field);border-radius:6px;padding:2px 6px}
+.empty{color:var(--muted);font-size:13px;padding:10px 0}
+/* assistant */
+.bar{border-top:1px solid var(--line);padding:10px 12px 12px}
+.reply{font-size:12.5px;color:var(--ink);background:rgba(180,154,108,.08);border-left:2px solid var(--gold);border-radius:0 8px 8px 0;padding:6px 9px;margin-bottom:8px;white-space:pre-wrap}
+.reply.err{border-color:var(--danger);color:var(--danger);background:rgba(224,123,123,.08)}
+.inrow{display:flex;gap:6px;align-items:flex-end;background:var(--field);border:1px solid var(--line);border-radius:12px;padding:5px 5px 5px 10px}
+.inrow:focus-within{border-color:var(--gold)}
+#say{flex:1;overflow:hidden;border:0;background:transparent;resize:none;outline:none;max-height:110px;min-height:22px;padding:3px 0;line-height:1.45;user-select:text}
+#say::placeholder{color:var(--faint)}
+.go{border:0;border-radius:9px;width:32px;height:32px;display:grid;place-items:center;flex:none;padding:0;font-size:15px}
+.go.add{background:transparent;color:var(--muted)}.go.add:hover{color:var(--gold)}
+.go.mic{background:transparent;color:var(--muted)}.go.mic.rec{color:#fff;background:var(--danger)}
+.go.ask{background:var(--wine);color:var(--on-wine);box-shadow:inset 0 0 0 1px var(--gold)}.go.ask:hover{background:var(--wine-hi)}
+.go:disabled{opacity:.5;cursor:default}
+.hint{font-size:11px;color:var(--faint);margin-top:6px}
+.hint a,.link{color:var(--gold);cursor:pointer;text-decoration:underline;text-underline-offset:2px;background:none;border:0;padding:0;font-size:inherit}
+/* settings */
+.set{position:absolute;inset:0;background:var(--card);display:flex;flex-direction:column;z-index:5}
+.set[hidden]{display:none}
+.set .scroll{padding-top:10px}
+.set h3{font-family:var(--f-display);font-weight:400;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin:16px 0 6px}
+.f{display:grid;gap:4px;font-size:12px;color:var(--muted);margin-bottom:10px}
+.i{width:100%;border:1px solid var(--line);background:var(--field);border-radius:9px;padding:7px 9px;color:var(--ink);user-select:text}
+.seg{display:flex;gap:6px;margin-bottom:10px}
+.seg button{flex:1;border:1px solid var(--line);background:transparent;border-radius:9px;padding:7px;color:var(--muted)}
+.seg button[aria-pressed=true]{background:var(--wine);color:var(--on-wine);border-color:var(--gold)}
+.btn{border:1px solid var(--line);background:var(--field);border-radius:9px;padding:6px 12px;color:var(--ink)}
+.btn:hover{border-color:var(--gold)}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.note{font-size:11.5px;color:var(--faint)}
+.ok{color:#9FBF86}.bad{color:var(--danger)}
+.switch{display:flex;align-items:center;gap:8px;font-size:13px;margin-bottom:8px;cursor:pointer}
+.toast{position:absolute;left:12px;right:12px;top:70px;background:var(--wine);color:var(--on-wine);border:1px solid var(--gold);border-radius:12px;padding:10px 12px;z-index:9;box-shadow:0 12px 30px -10px #000}
+.toast[hidden]{display:none}
+.toast b{display:block;font-family:var(--f-display);letter-spacing:.08em;font-weight:400;color:var(--gold-hi)}
+.wiz{position:absolute;inset:0;background:var(--card);display:flex;flex-direction:column;z-index:8}
+.wiz[hidden]{display:none}
+.wiz .msgs{flex:1;overflow:auto;padding:14px 16px 8px;display:flex;flex-direction:column;gap:10px}
+.bub{max-width:92%;padding:9px 12px;border-radius:14px;font-size:13.5px;line-height:1.5;white-space:pre-wrap;user-select:text}
+.bub.ai{background:var(--field);border:1px solid var(--line);border-top-left-radius:4px;align-self:flex-start}
+.bub.mine{background:var(--wine);color:var(--on-wine);border-top-right-radius:4px;align-self:flex-end}
+.bub.ai b{color:var(--gold);font-weight:700}
+.ctl{padding:10px 14px 14px;border-top:1px solid var(--line);display:grid;gap:8px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.cp{border:1px solid var(--line);background:transparent;border-radius:999px;padding:5px 11px;font-size:12.5px;color:var(--ink)}
+.cp:hover,.cp[aria-pressed=true]{border-color:var(--gold);color:var(--gold)}
+.cp.main{background:var(--wine);border-color:var(--gold);color:var(--on-wine)}
+.sw{display:inline-flex;gap:2px;vertical-align:middle;margin-right:6px}.sw i{width:10px;height:14px;border-radius:3px;display:inline-block}
+.stk{display:flex;gap:10px;flex-wrap:wrap}
+.stk button{border:2px solid var(--line);background:var(--field);border-radius:14px;padding:6px;width:118px;height:118px;display:grid;place-items:center}
+.stk button[aria-pressed=true]{border-color:var(--gold)}
+.stk img{max-width:100%;max-height:100%;object-fit:contain}
+.prog{height:3px;background:var(--line)}.prog i{display:block;height:100%;background:var(--gold);transition:width .3s}
+.spin{display:inline-block;width:12px;height:12px;border:2px solid var(--gold);border-right-color:transparent;border-radius:50%;animation:sp 1s linear infinite;vertical-align:-2px;margin-right:6px}
+@keyframes sp{to{transform:rotate(360deg)}}
+body.f-hand .titles b{letter-spacing:.02em;font-size:22px;text-transform:none}
+body.r-sharp .inrow,body.r-sharp .i,body.r-sharp .btn,body.r-sharp .reply{border-radius:4px}
+.rx{border:0;background:transparent;padding:0 2px;font-size:15px;line-height:1;cursor:pointer;border-radius:6px}
+.rx:hover{background:var(--olive-soft)}
+.pick{position:absolute;z-index:12;background:var(--card);border:1px solid var(--gold);border-radius:14px;padding:6px;display:flex;flex-wrap:wrap;gap:2px;width:228px;box-shadow:0 14px 30px -12px #000}
+.pick button{border:0;background:transparent;font-size:20px;width:34px;height:34px;border-radius:8px;padding:0}
+.pick button:hover{background:var(--olive-soft)}
+.burst{position:fixed;pointer-events:none;z-index:30;font-size:22px;will-change:transform,opacity}
+.praise{position:absolute;left:50%;transform:translateX(-50%);top:62px;background:var(--wine);color:var(--on-wine);border:1px solid var(--gold);border-radius:999px;padding:5px 14px;font-size:13px;z-index:25;white-space:nowrap;box-shadow:0 10px 24px -10px #000}
+.praise[hidden]{display:none}
+.streak{color:var(--gold)}
+.mewrap{position:relative;flex:none}
+.sup{border:1px solid color-mix(in srgb,var(--gold) 40%,transparent);background:var(--field);border-radius:14px;padding:11px 12px;margin:8px 0;font-size:13px}
+.sup .h{font-family:var(--fT,serif);letter-spacing:.14em;text-transform:uppercase;font-size:10.5px;color:var(--gold);display:flex;justify-content:space-between}
+.sup .tt{font-weight:700;margin:6px 0 3px;font-size:14px}.sup .tx{color:var(--soft,var(--ink));opacity:.9}.sup .dir{margin-top:5px;font-weight:600}
+.sup .moods{display:flex;flex-wrap:wrap;gap:5px;margin:6px 0}.sup .moods button,.sup .act{border:1px solid var(--line);background:transparent;border-radius:10px;padding:4px 9px;font-size:12.5px;color:var(--ink)}
+.sup .moods button:hover,.sup .act:hover{border-color:var(--gold);color:var(--gold)}.sup .act{margin-top:7px}
+.sup .x{background:none;border:0;color:var(--faint);font-size:12px}
+.breath{display:grid;place-items:center;gap:10px;padding:10px 0}.breath .c{width:120px;height:120px;border-radius:50%;background:var(--olive);opacity:.7;transform:scale(.45);transition:transform 4s ease-in-out}
+.breath .c.in{transform:scale(1)}.breath .c.out{transition-duration:6s}
+.day{color:var(--gold);font-size:11.5px}
+#dateB.set{border-color:var(--gold);color:var(--gold);font-size:11px;width:auto;padding:0 8px;white-space:nowrap}
+.whenp{position:absolute;left:10px;right:10px;bottom:74px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:10px;box-shadow:0 10px 30px rgba(0,0,0,.4);z-index:30}
+.whenp .chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
+.whenp .chips button{border:1px solid var(--line);background:var(--field);color:var(--ink);border-radius:10px;padding:4px 9px;font-size:12.5px}
+.whenp .chips button[aria-pressed=true],.whenp .chips button:hover{border-color:var(--gold);color:var(--gold)}
+.whenp input{background:var(--field);color:var(--ink);border:1px solid var(--line);border-radius:9px;padding:4px 7px;font:inherit;font-size:12.5px}
+.whenp input::-webkit-calendar-picker-indicator{filter:invert(.6)}
+.whenp .row{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.whenp .ttl{font-size:12px;color:var(--faint);margin-bottom:6px}
+.wd{font-size:11px;color:var(--faint);margin-left:4px}
+.mood{position:absolute;right:-4px;bottom:-4px;font-size:16px;line-height:1;filter:drop-shadow(0 1px 2px rgba(0,0,0,.5));pointer-events:none}
+.me.hop{animation:hop .6s ease}
+@keyframes hop{0%{transform:scale(1)}30%{transform:scale(1.15) rotate(-6deg)}60%{transform:scale(.95) rotate(4deg)}100%{transform:scale(1)}}
+.card{border:1px solid var(--line);background:var(--field);border-radius:12px;padding:9px 11px;margin:8px 0;font-size:13px}
+.card .row{gap:6px;margin-top:6px}
+.en button{border:1px solid var(--line);background:transparent;border-radius:10px;padding:4px 10px;font-size:13px;color:var(--ink)}
+.en button[aria-pressed=true],.en button:hover{border-color:var(--gold);color:var(--gold)}
+.carried{color:var(--faint);font-style:italic}
+.dim{opacity:.55}
+.awards{display:flex;flex-wrap:wrap;gap:6px;margin:4px 0 8px}
+.aw{border:1px solid var(--line);border-radius:10px;padding:3px 8px;font-size:12px;display:inline-flex;gap:5px;align-items:center}
+.aw.no{opacity:.35;filter:grayscale(1)}
+.rit{display:grid;gap:6px}.rit button{text-align:left;border:1px solid var(--line);background:var(--field);border-radius:10px;padding:7px 10px;color:var(--ink)}
+.rit button:hover{border-color:var(--gold)}
+@media (prefers-reduced-motion:no-preference){.it{animation:in .2s ease both}@keyframes in{from{opacity:0;transform:translateY(3px)}}}
+</style>
+
+<div class="app" id="app">
+  <div class="head">
+    <div id="dragbar">
+      <span class="mewrap"><button class="me" id="me" type="button" title=""></button><span class="mood" id="mood"></span></span>
+      <div class="titles" id="titles"><b id="ttl"></b><span id="sub"></span></div>
+    </div>
+    <div class="tools">
+      <button class="ic" id="briefB" type="button">🔊</button>
+      <button class="ic" id="pinB" type="button"></button>
+      <button class="ic" id="setB" type="button">⚙</button>
+      <button class="ic" id="minB" type="button">—</button>
+      <button class="ic" id="closeB" type="button">✕</button>
+    </div>
+  </div>
+  <div class="scroll" id="list"></div>
+  <div class="bar">
+    <div class="reply" id="reply" hidden></div>
+    <div class="inrow">
+      <textarea id="say" rows="1"></textarea>
+      <button class="go add" id="dateB" type="button">📅</button>
+      <button class="go add" id="addB" type="button">＋</button>
+      <button class="go mic" id="micB" type="button">🎙</button>
+      <button class="go add" id="pasteB" type="button" hidden>📋</button>
+      <button class="go ask" id="askB" type="button">✦</button>
+    </div>
+    <div class="hint" id="hint"></div>
+  </div>
+  <div class="whenp" id="whenP" hidden></div>
+  <div class="toast" id="toast" hidden></div>
+  <div class="praise" id="praise" hidden></div>
+  <div class="set" id="set" hidden></div>
+  <div class="wiz" id="wiz" hidden></div>
+</div>
+
+<script>
+const IS_NL=typeof Neutralino!=="undefined"&&typeof NL_PORT!=="undefined";
+if(IS_NL){try{Neutralino.init()}catch(e){}}
+const $=id=>document.getElementById(id);
+/* ---------- i18n ---------- */
+const T={
+uk:{today:"Сьогодні",all:"Усі справи",done:"Зроблено",reminders:"Нагадування",openN:"відкритих",doneN:"зроблено",
+ sayPh:"Напишіть або скажіть, що зробити…",add:"Додати як є",mic:"Голосом",ask:"Попросити ШІ",
+ hintAI:"✦ — ШІ сам сформулює справу, поставить нагадування або відмітить зроблене",hintNoAI:"Підключіть Claude або ChatGPT у ⚙, щоб працював помічник. Без ШІ ＋ додає справу як є.",
+ emptyToday:"На сьогодні порожньо ♡ Розгорніть список і позначте справи ☀",emptyAll:"Поки що порожньо. Напишіть першу справу внизу.",
+ sunOn:"Прибрати з «Сьогодні»",sunOff:"На сьогодні",del:"Видалити",edit:"Двічі клацніть, щоб змінити",
+ pin:"Завжди поверх вікон",settings:"Налаштування",minimize:"Згорнути",close:"Закрити",expand:"Розгорнути / згорнути",
+ thinking:"Думаю…",fromAI:"від ШІ",remind:"🔔",remindTitle:"Нагадування",
+ setTitle:"Налаштування",back:"← Назад",aiSec:"Помічник ШІ",provider:"Хто допомагає",key:"API-ключ",model:"Модель",test:"Перевірити",testOk:"Працює ✓",
+ keyHelpC:"Ключ з console.anthropic.com → API Keys. Оплата API окрема від підписки Claude.",keyHelpO:"Ключ з platform.openai.com → API keys. Цей ключ також вмикає розпізнавання голосу.",
+ keyLocal:"Ключі зберігаються тільки на цьому комп’ютері.",
+ youSec:"Ви",name:"Ваше ім’я",sticker:"Ваша наліпка або фото",upload:"Завантажити",remove:"Прибрати",
+ areasSec:"Розділи",areasHelp:"Через кому. ШІ сам розкладатиме справи по розділах.",
+ appSec:"Застосунок",lang:"Мова",autostart:"Запускати разом з комп’ютером",
+ dataSec:"Дані",exportB:"Зберегти копію",importB:"Відновити з копії",importOk:"Дані відновлено ✓",importErr:"Це не схоже на копію нотатника.",
+ micWin:"Курсор у полі. Натисніть Win + H — увімкнеться голосове введення Windows. Або додайте ключ OpenAI в ⚙ для кращого розпізнавання.",
+ micDenied:"Немає доступу до мікрофона.",listening:"Слухаю… натисніть 🎙 ще раз, щоб закінчити",
+ redoSetup:"Налаштувати все з ШІ ще раз",react:"Реакція — клікніть, щоб змінити",codeWord:"Кодове слово або смайлик",codeHelp:"Напишіть його в будь-якому чаті Claude перед справою — вона з’явиться тут. Нове слово діє в нових чатах.",rxSec:"Реакції на зроблене",rxNames:{cute:"Милі",sport:"Спорт",nature:"Природа",calm:"Спокійні",off:"Без реакцій"},askGPT:"Розібрати в ChatGPT",gptSent:"Відкрив ChatGPT з вашим запитом. Коли він відповість — натисніть «Копіювати» під відповіддю, а тут 📋.",pasteNone:"У буфері немає відповіді ChatGPT. Скопіюйте його відповідь і натисніть 📋 ще раз.",
+ hintClaude:"У будь-якому чаті Claude напишіть {c} і справу — вона з’явиться тут. ＋ — додати вручну.",hintClaudeWait:"Claude ще не підключено. ⚙ → «Налаштувати все з ШІ ще раз».",hintGPT:"✦ — відкрити ChatGPT з вашим запитом, 📋 — вставити його відповідь.",
+ connSec:"Як працює ШІ",connClaude:"Через мій чат Claude",connGPT:"Через мій чат ChatGPT",connAPI:"Свій API-ключ",connNone:"Без ШІ",morningT:"План на сьогодні",eveningT:"Що вдалося сьогодні",eveningTxt:"Сьогодні вдалося: {d} ✨ Решта спокійно почекає до завтра — і це нормально 🤍",noChange:"Нічого не змінено.",areasDefault:"Робота, Особисте, Здоров’я, Навчання, Інше"},
+en:{today:"Today",all:"All tasks",done:"Done",reminders:"Reminders",openN:"open",doneN:"done",
+ sayPh:"Type or say what needs doing…",add:"Add as is",mic:"Voice",ask:"Ask AI",
+ hintAI:"✦ — AI phrases the task, sets reminders or ticks things off",hintNoAI:"Connect Claude or ChatGPT in ⚙ to use the assistant. Without AI, ＋ adds the task as typed.",
+ emptyToday:"Nothing for today ♡ Expand the list and mark tasks ☀",emptyAll:"Empty so far. Write your first task below.",
+ sunOn:"Remove from Today",sunOff:"For today",del:"Delete",edit:"Double-click to edit",
+ pin:"Always on top",settings:"Settings",minimize:"Minimise",close:"Close",expand:"Expand / collapse",
+ thinking:"Thinking…",fromAI:"by AI",remind:"🔔",remindTitle:"Reminder",
+ setTitle:"Settings",back:"← Back",aiSec:"AI assistant",provider:"Who helps",key:"API key",model:"Model",test:"Test",testOk:"Works ✓",
+ keyHelpC:"Get a key at console.anthropic.com → API Keys. API billing is separate from a Claude subscription.",keyHelpO:"Get a key at platform.openai.com → API keys. This key also enables voice recognition.",
+ keyLocal:"Keys are stored on this computer only.",
+ youSec:"You",name:"Your name",sticker:"Your sticker or photo",upload:"Upload",remove:"Remove",
+ areasSec:"Sections",areasHelp:"Comma-separated. The AI files tasks into them.",
+ appSec:"App",lang:"Language",autostart:"Start with the computer",
+ dataSec:"Data",exportB:"Save backup",importB:"Restore backup",importOk:"Data restored ✓",importErr:"This doesn't look like a notes backup.",
+ micWin:"The cursor is in the field. Press Win + H for Windows voice typing, or add an OpenAI key in ⚙ for better recognition.",
+ micDenied:"No microphone access.",listening:"Listening… press 🎙 again to finish",
+ redoSetup:"Run the AI setup again",react:"Reaction — click to change",codeWord:"Code word or emoji",codeHelp:"Type it before a task in any Claude chat and it lands here. A new word works in new chats.",rxSec:"Reactions to done tasks",rxNames:{cute:"Cute",sport:"Sport",nature:"Nature",calm:"Calm",off:"No reactions"},askGPT:"Work it out in ChatGPT",gptSent:"Opened ChatGPT with your request. When it answers, click “Copy” under the answer, then 📋 here.",pasteNone:"No ChatGPT answer in the clipboard. Copy its answer and press 📋 again.",
+ hintClaude:"In any Claude chat type {c} and a task — it appears here. ＋ adds manually.",hintClaudeWait:"Claude isn’t connected yet. ⚙ → “Run the AI setup again”.",hintGPT:"✦ opens ChatGPT with your request, 📋 pastes its answer.",
+ connSec:"How AI works",connClaude:"Via my Claude chat",connGPT:"Via my ChatGPT chat",connAPI:"My own API key",connNone:"No AI",morningT:"Today’s plan",eveningT:"What went well today",eveningTxt:"Done today: {d} ✨ The rest can calmly wait until tomorrow — and that’s okay 🤍",noChange:"Nothing changed.",areasDefault:"Work, Personal, Health, Learning, Other"}};
+/* ---------- themes ---------- */
+const THEMES={
+ oldmoney:{name:{uk:"Old Money",en:"Old Money"},bg:"#141010",card:"#1E1816",field:"#171211",ink:"#EAE0D0",muted:"#9B8D7D",faint:"#6F6259",line:"#352B27",gold:"#B49A6C",goldHi:"#D1B47E",wine:"#7A2A3A",wineHi:"#93354A",olive:"#8C8A5E"},
+ cream:{name:{uk:"Кремовий папір",en:"Cream paper"},bg:"#F3EEE8",card:"#FBF8F4",field:"#FFFFFF",ink:"#2E2420",muted:"#7E7066",faint:"#A89A8E",line:"#E5DACF",gold:"#9C7F4E",goldHi:"#8A6B3A",wine:"#6E2434",wineHi:"#852C40",olive:"#6E6D45"},
+ pastel:{name:{uk:"Пастель",en:"Pastel"},bg:"#FFF6F8",card:"#FFF9FB",field:"#FFFFFF",ink:"#3B2F38",muted:"#8A7884",faint:"#B8A8B3",line:"#F0DCE4",gold:"#C77D99",goldHi:"#B06582",wine:"#E9AFC3",wineHi:"#E09AB3",olive:"#8DA89A"},
+ minimal:{name:{uk:"Мінімалізм",en:"Minimal"},bg:"#F5F5F4",card:"#FFFFFF",field:"#F7F7F6",ink:"#1C1C1C",muted:"#6B6B6B",faint:"#A3A3A3",line:"#E6E6E4",gold:"#1C1C1C",goldHi:"#000000",wine:"#1C1C1C",wineHi:"#333333",olive:"#3F7D58"},
+ forest:{name:{uk:"Ліс",en:"Forest"},bg:"#121814",card:"#18201B",field:"#131A15",ink:"#E6EDE3",muted:"#93A394",faint:"#647366",line:"#2A362D",gold:"#C9B37E",goldHi:"#E0CB94",wine:"#3E5C45",wineHi:"#4B6E53",olive:"#9DB27A"},
+ ocean:{name:{uk:"Океан",en:"Ocean"},bg:"#0E1620",card:"#121D29",field:"#0F1822",ink:"#E4EDF5",muted:"#8FA3B5",faint:"#5F7487",line:"#22334A",gold:"#6FC3D1",goldHi:"#92D6E0",wine:"#25507A",wineHi:"#2E6194",olive:"#7FB7A4"}};
+const FONTS={elegant:'"Tenor Sans",Georgia,serif',modern:'"Nunito","Segoe UI",sans-serif',hand:'"Marck Script","Segoe Script",cursive'};
+function applyTheme(){
+  const th=Object.assign({},THEMES.oldmoney,THEMES[S.settings.themeId]||{},S.settings.themeId==="custom"?S.settings.customTheme||{}:{});
+  const r=document.documentElement.style;
+  [["bg","--bg"],["card","--card"],["field","--field"],["ink","--ink"],["muted","--muted"],["faint","--faint"],["line","--line"],["gold","--gold"],["goldHi","--gold-hi"],["wine","--wine"],["wineHi","--wine-hi"],["olive","--olive"]].forEach(([k,v])=>{if(th[k])r.setProperty(v,th[k])});
+  r.setProperty("--on-wine",lum(th.wine)<0.55?"#FBF7F2":"#2A2024");
+  r.setProperty("--olive-soft",(th.olive||"#8C8A5E")+"29");
+  const light=lum(th.card)>0.5;r.setProperty("color-scheme",light?"light":"dark");
+  r.setProperty("--f-title",FONTS[S.settings.font]||FONTS.elegant);
+  document.body.classList.toggle("r-sharp",S.settings.corners==="sharp");
+  document.body.classList.toggle("f-hand",S.settings.font==="hand");
+  if(S.settings.font==="hand")r.setProperty("--title-size","22px");
+}
+function lum(hex){const m=/^#?([0-9a-f]{6})$/i.exec(hex||"");if(!m)return 0;const n=parseInt(m[1],16);return((n>>16&255)*.299+(n>>8&255)*.587+(n&255)*.114)/255}
+/* ---------- state ---------- */
+const KEY="zatyshok.v1";
+const todayStr=()=>{const d=new Date(),z=n=>String(n).padStart(2,"0");return d.getFullYear()+"-"+z(d.getMonth()+1)+"-"+z(d.getDate())};
+const uid=()=>Math.random().toString(36).slice(2,9)+Date.now().toString(36).slice(-3);
+const now=()=>new Date().toISOString();
+function fresh(){
+  const lang=(navigator.language||"uk").toLowerCase().startsWith("en")?"en":"uk";
+  const areas=T[lang].areasDefault.split(",").map(s=>s.trim());
+  const T0=todayStr();
+  return {items:[
+    {id:uid(),text:lang==="uk"?"Підключити Claude або ChatGPT у ⚙ (приклад)":"Connect Claude or ChatGPT in ⚙ (example)",area:areas[areas.length-1],done:false,today:T0,createdAt:now(),by:"me"},
+    {id:uid(),text:lang==="uk"?"Поставити свою наліпку в налаштуваннях (приклад)":"Add your sticker in settings (example)",area:areas[areas.length-1],done:false,today:"",createdAt:now(),by:"me"}],
+   areas,settings:{provider:"claude",claudeKey:"",openaiKey:"",claudeModel:"claude-sonnet-5-5",openaiModel:"gpt-6-luna",openaiImageModel:"gpt-image-2",lang,name:"",aiMode:"none",sticker:"",expanded:false,pin:true,autostart:false,themeId:"oldmoney",customTheme:null,font:"elegant",corners:"soft",doneMode:"day",reactions:"cute",codeWord:"📌",morning:"",evening:"",remindLead:0,onboarded:false,consentAI:false,sizes:{}}};
+}
+let S=fresh();
+const EX={uk:["Підключити Claude або ChatGPT у ⚙ (приклад)","Поставити свою наліпку в налаштуваннях (приклад)"],en:["Connect Claude or ChatGPT in ⚙ (example)","Add your sticker in settings (example)"]};
+function localizeDefaults(){
+  const L=S.settings.lang,O=L==="uk"?"en":"uk";
+  const def=l=>T[l].areasDefault.split(",").map(x=>x.trim());
+  const from=def(O),to=def(L);
+  if(S.areas.join("|")===from.join("|")){S.areas=to;S.items.forEach(i=>{const k=from.indexOf(i.area);if(k>=0)i.area=to[k]})}
+  S.items.forEach(i=>{const k=EX[O].indexOf(i.text);if(k>=0)i.text=EX[L][k]});
+}
+function migrate(){S.items=S.items||[];S.areas=S.areas&&S.areas.length?S.areas:fresh().areas;S.settings=Object.assign(fresh().settings,S.settings||{});if(S.settings.aiMode==="none"&&(S.settings.claudeKey||S.settings.openaiKey)&&S.settings.consentAI)S.settings.aiMode="api";localizeDefaults()}
+const t=k=>(T[S.settings.lang]||T.uk)[k]??k;
+let saveT,dirty=false,lastText="",baseObj=null,dataPath=null;
+function save(){dirty=true;clearTimeout(saveT);saveT=setTimeout(saveNow,200)}
+async function releaseLock(){if(IS_NL){try{await Neutralino.storage.setData("lock",null)}catch(e){}}}
+async function getDataPath(){if(dataPath||!IS_NL)return dataPath;try{const base=await Neutralino.os.getPath("data");const dir=base.replace(/[\\/]+$/,"")+"/Zatyshok";try{await Neutralino.filesystem.createDirectory(dir)}catch(e){}dataPath=dir+"/zatyshok.json"}catch(e){}return dataPath}
+async function readShared(){const p=await getDataPath();if(!p)return null;try{return await Neutralino.filesystem.readFile(p)}catch(e){return null}}
+const J=x=>JSON.stringify(x);
+function merge3(base,local,ext){
+  /* items: per-id 3-way merge; settings/areas: take whichever side changed */
+  const B=new Map((base?.items||[]).map(i=>[i.id,i])),L=new Map(local.items.map(i=>[i.id,i])),E=new Map((ext.items||[]).map(i=>[i.id,i]));
+  const ids=new Set([...L.keys(),...E.keys()]);const out=[];
+  for(const id of ids){const b=B.get(id),l=L.get(id),e=E.get(id);
+    if(l&&e){out.push(b&&J(e)!==J(b)&&J(l)===J(b)?e:l);continue}
+    if(l&&!e){if(b&&J(l)===J(b))continue;out.push(l);continue}
+    if(e&&!l){if(b&&J(e)===J(b))continue;out.push(e)}}
+  const m=Object.assign({},local,{items:out});
+  const keys=new Set([...Object.keys(local.settings||{}),...Object.keys(ext.settings||{})]);m.settings=Object.assign({},local.settings);
+  for(const k of keys){const bv=J(base?.settings?.[k]),ev=J(ext.settings?.[k]),lv=J(local.settings?.[k]);if(ev!==bv&&lv===bv)m.settings[k]=ext.settings[k]}
+  if(J(ext.areas)!==J(base?.areas)&&J(local.areas)===J(base?.areas))m.areas=ext.areas;
+  m.rev=Math.max(local.rev||0,ext.rev||0);return m;
+}
+async function saveNow(){clearTimeout(saveT);
+  if(IS_NL){const cur=await readShared();if(cur&&cur!==lastText){try{const ext=JSON.parse(cur);if(ext&&ext.items){S=merge3(baseObj,S,ext);migrate()}}catch(e){}}}
+  const j=JSON.stringify(S);try{localStorage.setItem(KEY,j)}catch(e){}
+  if(IS_NL){const p=await getDataPath();if(p){try{await Neutralino.filesystem.writeFile(p,j);lastText=j;baseObj=JSON.parse(j)}catch(e){}}try{await Neutralino.storage.setData("zatyshok",j)}catch(e){}}
+  dirty=false}
+async function load(){
+  let raw=null;
+  if(IS_NL){raw=await readShared();if(!raw){try{raw=await Neutralino.storage.getData("zatyshok")}catch(e){}}}
+  if(!raw){try{raw=localStorage.getItem(KEY)}catch(e){}}
+  if(raw){try{const d=JSON.parse(raw);if(d&&d.items)S=d}catch(e){}}
+  migrate();
+  if(IS_NL){lastText=await readShared()||"";try{baseObj=lastText?JSON.parse(lastText):null}catch(e){baseObj=null}if(!lastText)await saveNow()}
+}
+async function pollShared(){if(!IS_NL||dirty)return;const cur=await readShared();if(!cur||cur===lastText)return;
+  try{const ext=JSON.parse(cur);if(!ext||!ext.items)return;S=merge3(baseObj,S,ext);migrate();lastText=cur;baseObj=ext;applyTheme();render();if(typeof onShared==="function")onShared()}catch(e){}}
+/* ---------- helpers ---------- */
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const loc=()=>S.settings.lang==="en"?"en-GB":"uk-UA";
+const isToday=it=>{const T0=todayStr();return !!it.today&&it.today<=T0&&(!it.done||(it.doneAt||"").slice(0,10)===T0)};
+const fmtRem=iso=>{const d=new Date(iso),T0=new Date();const same=d.toDateString()===T0.toDateString();
+  return (same?"":d.toLocaleDateString(loc(),{day:"numeric",month:"short"})+" ")+d.toLocaleTimeString(loc(),{hour:"2-digit",minute:"2-digit"})};
+const apiReady=()=>S.settings.aiMode==="api"&&(S.settings.provider==="openai"?!!S.settings.openaiKey:!!S.settings.claudeKey);
+const aiReady=apiReady;
+const mode=()=>S.settings.aiMode||"none";
+/* ---------- window ---------- */
+const SIZE={compact:{width:360,height:520},expanded:{width:470,height:780}};
+let lastW=null;
+async function applyWindow(){
+  if(!IS_NL)return;
+  try{await Neutralino.window.setAlwaysOnTop(!!S.settings.pin)}catch(e){}
+  try{const sz=(S.settings.sizes||{})[S.settings.expanded?"e":"c"]||(S.settings.expanded?SIZE.expanded:SIZE.compact);const dpr=window.devicePixelRatio||1;const nw=Math.round(sz.width*dpr);
+    if(lastW&&lastW!==nw){try{const p=await Neutralino.window.getPosition();await Neutralino.window.move(Math.max(0,p.x+lastW-nw),p.y)}catch(e){}}
+    lastW=nw;await Neutralino.window.setSize({width:Math.round(sz.width*dpr),height:Math.round(sz.height*dpr),minWidth:Math.round(300*dpr),minHeight:Math.round(360*dpr),resizable:true})}catch(e){}
+}
+async function setAutostart(on){
+  if(!IS_NL)return;
+  if(NL_OS==="Darwin"){const app=NL_PATH.replace(/\/Contents\/MacOS\/?$/,"");
+    const cmd=on?`osascript -e 'tell application "System Events" to make login item at end with properties {path:"${app}", hidden:false}'`:`osascript -e 'tell application "System Events" to delete login item "Затишок"'`;
+    try{await Neutralino.os.execCommand(cmd)}catch(e){}return}
+  if(NL_OS!=="Windows")return;
+  const exe=(NL_PATH+"/"+(NL_ARGS&&NL_ARGS[0]?NL_ARGS[0].split(/[\\/]/).pop():"Zatyshok.exe")).replace(/\//g,"\\");
+  const cmd=on?`reg add "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run" /v Zatyshok /t REG_SZ /d "\\"${exe}\\"" /f`
+             :`reg delete "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run" /v Zatyshok /f`;
+  try{await Neutralino.os.execCommand(cmd)}catch(e){}
+}
+/* ---------- reactions ---------- */
+const PACKS={cute:["🎉","🥳","💛","✨","🌸","🐾","🍓","😊","🧸","🫶"],sport:["💪","🔥","🏆","⚡","🥇","👟","🎯","🙌"],nature:["🌿","🌞","🌙","🍂","🌷","🦋","🌊","🍀"],calm:["✓","✦","🤍","☕","🕊","🌾","🫖","📖"]};
+const ALLRX=[...new Set(Object.values(PACKS).flat())];
+const PRAISE={uk:["Молодець!","Ще на крок ближче ✨","Так тримати!","Чудово вийшло!","Готово — можна видихнути","Ти супер!","Одна справа з плечей!"],en:["Well done!","One step closer ✨","Keep it up!","Nicely done!","Done — breathe out","You rock!","One less thing!"]};
+const ALLDONE={uk:"Усе на сьогодні зроблено! 🎉",en:"Everything for today is done! 🎉"};
+const pack=()=>PACKS[S.settings.reactions]||null;
+function celebrate(el,emoji,big){
+  if(window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches)return;
+  const r=el?el.getBoundingClientRect():{left:innerWidth/2,top:innerHeight/2,width:0,height:0};
+  const set=pack()||["✨"];const n=big?18:7;
+  for(let i=0;i<n;i++){const d=document.createElement("div");d.className="burst";d.textContent=i===0?emoji:set[Math.floor(Math.random()*set.length)];
+    d.style.left=(r.left+r.width/2-10)+"px";d.style.top=(r.top+r.height/2-12)+"px";document.body.appendChild(d);
+    const dx=(Math.random()-.5)*(big?260:120),dy=-(40+Math.random()*(big?220:90)),rot=(Math.random()-.5)*60;
+    d.animate([{transform:"translate(0,0) scale(.6)",opacity:1},{transform:`translate(${dx}px,${dy}px) rotate(${rot}deg) scale(${big?1.3:1.1})`,opacity:0}],{duration:900+Math.random()*500,easing:"cubic-bezier(.2,.7,.3,1)"}).onfinish=()=>d.remove()}
+}
+function praise(txt){const p=$("praise");p.textContent=txt;p.hidden=false;clearTimeout(praise.t);praise.t=setTimeout(()=>p.hidden=true,2200)}
+function onCompleted(it,el){
+  hop();setTimeout(checkAwards,300);
+  if(!pack())return;
+  const set=pack();it.reaction=it.reaction||set[Math.floor(Math.random()*set.length)];
+  const T0=todayStr();const left=S.items.filter(i=>!i.done&&isToday(i)).length;const doneToday=S.items.filter(i=>i.done&&(i.doneAt||"").slice(0,10)===T0).length;
+  if(left===0&&doneToday>1){celebrate(null,"🎉",true);praise(ALLDONE[S.settings.lang]||ALLDONE.uk)}
+  else{celebrate(el,it.reaction,false);const L=PRAISE[S.settings.lang]||PRAISE.uk;praise(L[Math.floor(Math.random()*L.length)])}
+}
+function openPicker(btn,it){
+  closePicker();const box=document.createElement("div");box.className="pick";box.id="pick";
+  const list=[...(pack()||[]),...ALLRX.filter(x=>!(pack()||[]).includes(x))].slice(0,24);
+  box.innerHTML=list.map(e=>`<button type="button" data-e="${e}">${e}</button>`).join("");
+  document.getElementById("app").appendChild(box);
+  const r=btn.getBoundingClientRect(),W=228;box.style.left=Math.max(8,Math.min(innerWidth-W-8,r.left-W/2))+"px";box.style.top=Math.min(innerHeight-160,r.bottom+4)+"px";
+  box.onclick=e=>{const b=e.target.closest("[data-e]");if(!b)return;it.reaction=b.dataset.e;save();closePicker();render();celebrate(btn,it.reaction,false)};
+  setTimeout(()=>document.addEventListener("click",closePicker,{once:true}),0);
+}
+function closePicker(){const p=document.getElementById("pick");if(p)p.remove()}
+/* ---------- dates & times ---------- */
+/* parseWhen: understands days of week, dates, month names, relative days and times in Ukrainian, Russian and English.
+   Returns {text, date:"YYYY-MM-DD"|null, time:"HH:MM"|null}. Pure JS, no deps (used by the app and by both Claude extensions). */
+function parseWhen(input, nowArg) {
+  const now = nowArg ? new Date(nowArg) : new Date();
+  const z = n => String(n).padStart(2, "0");
+  const ymd = d => d.getFullYear() + "-" + z(d.getMonth() + 1) + "-" + z(d.getDate());
+  const day0 = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const addD = n => { const d = new Date(day0); d.setDate(d.getDate() + n); return d; };
+  let s = " " + String(input || "").replace(/[ʼ’`]/g, "'") + " ";
+  let date = null, time = null, dayPart = null;
+  const B = "(?<![\\p{L}\\d])", E = "(?![\\p{L}\\d])";
+  const take = (re, fn) => { const r = new RegExp(re, "iu"); const m = s.match(r); if (!m) return false; const ok = fn(m); if (ok === false) return false; s = s.slice(0, m.index) + " " + s.slice(m.index + m[0].length); return true; };
+  const PRE = "(?:(?:у|в|во|на|до|к|on|by|this|цього|цей|цю|этот|эту|в\\s+этот|в\\s+эту|наступн\\p{L}*|следующ\\p{L}*|next|найближч\\p{L}*|ближайш\\p{L}*)\\s+)*";
+  const MONTHS = [
+    ["січ", "янв", "jan"], ["лют", "фев", "feb"], ["берез", "март", "мар", "mar"], ["квіт", "апр", "apr"], ["трав", "мая", "май", "may"], ["черв", "июн", "jun"],
+    ["лип", "июл", "jul"], ["серп", "авг", "aug"], ["верес", "сент", "сен", "sep"], ["жовт", "окт", "oct"], ["листоп", "нояб", "ноя", "nov"], ["груд", "дек", "dec"]];
+  const monthOf = w => { w = w.toLowerCase(); for (let i = 0; i < 12; i++) for (const p of MONTHS[i]) if (w.startsWith(p)) return i; return -1; };
+  const MW = "(січ\\p{L}*|лют\\p{L}*|берез\\p{L}*|квіт\\p{L}*|трав\\p{L}*|черв\\p{L}*|лип\\p{L}*|серп\\p{L}*|верес\\p{L}*|жовт\\p{L}*|листопад\\p{L}*|груд\\p{L}*|январ\\p{L}*|феврал\\p{L}*|март\\p{L}*|апрел\\p{L}*|ма[яй]|июн\\p{L}*|июл\\p{L}*|август\\p{L}*|сентябр\\p{L}*|октябр\\p{L}*|ноябр\\p{L}*|декабр\\p{L}*|jan\\p{L}*|feb\\p{L}*|mar\\p{L}*|apr\\p{L}*|may|jun\\p{L}*|jul\\p{L}*|aug\\p{L}*|sep\\p{L}*|oct\\p{L}*|nov\\p{L}*|dec\\p{L}*)";
+  const mkDate = (d, m, y) => { let yy = y ? (y < 100 ? 2000 + y : y) : now.getFullYear(); let dt = new Date(yy, m, d); if (dt.getMonth() !== m) return null; if (!y && dt < day0) dt = new Date(yy + 1, m, d); return dt; };
+
+  /* ---- time ---- */
+  const hfix = (h, mer) => { mer = (mer || "").toLowerCase(); if (/^(pm|p\.m\.|вечор|вечер|дня|дн)/.test(mer) && h < 12) { if (!/^дн/.test(mer) || h <= 7) h += 12; } if (/^(am|a\.m\.|ранк|утр|ночі|ночи)/.test(mer) && h === 12) h = 0; return h; };
+  const MER = "(?:\\s*(am|pm|a\\.m\\.|p\\.m\\.|ранку|утра|вечора|вечера|дня|ночі|ночи))?";
+  const UNIT = "(?:\\s*(?:год\\p{L}*|час\\p{L}*|ч\\.?|h|hours?|o'clock))?";
+  // "о 10:30", "в 9.15", "at 14:00", "10:30"
+  take(B + "(?:(?:о|об|в|во|на|к|at|around|близько|около)\\s+)?([01]?\\d|2[0-3])[:.]([0-5]\\d)" + UNIT + MER + E, m => { time = z(hfix(+m[1], m[3])) + ":" + m[2]; }) ||
+  // "о 10 годині", "в 3 часа дня", "at 5pm", "о 10"
+  take(B + "(?:о|об|в|во|на|к|at|around|близько|около)\\s+([01]?\\d|2[0-3])" + UNIT + MER + E, m => { const after = s.slice(m.index + m[0].length); const hasU = /\S/.test(m[0].slice(m[0].indexOf(m[1]) + m[1].length)); const strong = /^(?:о|об|at)\s/i.test(m[0]); if (!strong && !hasU && /^\s*\p{L}/u.test(after) && !/^\s*(ранку|утра|вечора|вечера|дня|ночі|ночи|am|pm)/iu.test(after)) return false; time = z(hfix(+m[1], m[2])) + ":00"; }) ||
+  take(B + "([01]?\\d)\\s*(am|pm)" + E, m => { time = z(hfix(+m[1], m[2])) + ":00"; });
+  // parts of day
+  take(B + "(вранці|зранку|уранці|утром|с\\s+утра|in\\s+the\\s+morning|morning)" + E, () => { dayPart = "09:00"; }) ||
+  take(B + "(вдень|удень|днем|днём|in\\s+the\\s+afternoon|afternoon|в\\s+обід|в\\s+обед|at\\s+lunch)" + E, () => { dayPart = "13:00"; }) ||
+  take(B + "(ввечері|увечері|вечером|in\\s+the\\s+evening|evening|tonight)" + E, m => { dayPart = "19:00"; if (/tonight/i.test(m[1]) && !date) date = day0; }) ||
+  take(B + "(вночі|уночі|ночью|at\\s+night)" + E, () => { dayPart = "22:00"; });
+  // "через 2 години", "через пів години", "in 3 hours"
+  take(B + "(?:через|in)\\s+(\\d+|пів|полчаса|half\\s+an?)\\s*(хв\\p{L}*|мин\\p{L}*|minutes?|mins?|год\\p{L}*|час\\p{L}*|hours?)" + E, m => {
+    const n = /^\d/.test(m[1]) ? +m[1] : 0.5; const mins = /^(хв|мин|min)/i.test(m[2]) ? n : n * 60; const d = new Date(now.getTime() + mins * 60000); date = new Date(d.getFullYear(), d.getMonth(), d.getDate()); time = z(d.getHours()) + ":" + z(d.getMinutes()); });
+
+  /* ---- date ---- */
+  const W = [
+    ["нед\\p{L}*|воскрес\\p{L}*|sun\\p{L}*|нд|вс|вск"], ["понед\\p{L}*|mon\\p{L}*|пн"], ["вівтор\\p{L}*|вторник\\p{L}*|tue\\p{L}*|вт"], ["серед\\p{L}*|сред\\p{L}*|wed\\p{L}*|ср"],
+    ["четвер\\p{L}*|четверг\\p{L}*|thu\\p{L}*|чт"], ["п'ятниц\\p{L}*|пятниц\\p{L}*|fri\\p{L}*|пт"], ["субот\\p{L}*|суббот\\p{L}*|sat\\p{L}*|сб"]];
+  if (!date) take(B + "(?:до\\s+)?(?:кінц\\p{L}*|конц\\p{L}*|end\\s+of)\\s+(?:цього\\s+|этого\\s+|the\\s+)?(тижн\\p{L}*|недел\\p{L}*|week|місяц\\p{L}*|месяц\\p{L}*|month)" + E, m => {
+    if (/^(тиж|нед|week)/i.test(m[1])) { const k = (5 - day0.getDay() + 7) % 7; date = addD(k); } else date = new Date(now.getFullYear(), now.getMonth() + 1, 0); });
+  if (!date) take(B + "(?:на\\s+|в\\s+|у\\s+)?(?:наступн\\p{L}*\\s+тиж\\p{L}*|наступному\\s+тижні|следующ\\p{L}*\\s+недел\\p{L}*|next\\s+week)" + E, () => { const k = ((8 - day0.getDay()) % 7) || 7; date = addD(k); });
+  if (!date) take(B + "(?:на\\s+|в\\s+|у\\s+)?(?:наступн\\p{L}*\\s+місяц\\p{L}*|следующ\\p{L}*\\s+месяц\\p{L}*|next\\s+month)" + E, () => { date = new Date(now.getFullYear(), now.getMonth() + 1, 1); });
+  if (!date) take(B + "(?:через|in)\\s+(\\d+|один|одну|одна|два|дві|две|три|чотири|четыре|п'ять|пять|a|an|one|two|three)?\\s*(дн\\p{L}*|день|днів|дней|days?|тиж\\p{L}*|недел\\p{L}*|weeks?|місяц\\p{L}*|месяц\\p{L}*|months?)" + E, m => {
+    const NUM = { "один": 1, "одну": 1, "одна": 1, "a": 1, "an": 1, "one": 1, "два": 2, "дві": 2, "две": 2, "two": 2, "три": 3, "three": 3, "чотири": 4, "четыре": 4, "п'ять": 5, "пять": 5 };
+    const n = m[1] ? (+m[1] || NUM[m[1].toLowerCase()] || 1) : 1; const u = m[2].toLowerCase();
+    if (/^(тиж|нед|week)/.test(u)) date = addD(7 * n); else if (/^(міс|мес|month)/.test(u)) date = new Date(day0.getFullYear(), day0.getMonth() + n, day0.getDate()); else date = addD(n); });
+  if (!date) take(B + "(післязавтра|послезавтра|day\\s+after\\s+tomorrow)" + E, () => { date = addD(2); });
+  if (!date) take(B + "(?:на\\s+)?(завтра|tomorrow)" + E, () => { date = addD(1); });
+  if (!date) take(B + "(?:на\\s+)?(сьогодні|сегодня|today)" + E, () => { date = day0; });
+  // "25.10", "25/10/2026", "2026-10-25"
+  if (!date) take(B + "(\\d{4})-(\\d{1,2})-(\\d{1,2})" + E, m => { const d = mkDate(+m[3], +m[2] - 1, +m[1]); if (!d) return false; date = d; });
+  if (!date) take(B + "(?:на\\s+|до\\s+|on\\s+)?([0-3]?\\d)[./]([01]?\\d)(?:[./](\\d{2,4}))?" + E, m => { const d = mkDate(+m[1], +m[2] - 1, m[3] ? +m[3] : 0); if (!d) return false; date = d; });
+  // "25 жовтня", "25-го жовтня", "October 25", "25th of October"
+  if (!date) take(B + "(?:на\\s+|до\\s+|on\\s+)?([0-3]?\\d)(?:-?го|-?е|st|nd|rd|th)?\\s+(?:of\\s+)?" + MW + "(?:\\s+(\\d{4}))?" + E, m => { const mo = monthOf(m[2]); if (mo < 0) return false; const d = mkDate(+m[1], mo, m[3] ? +m[3] : 0); if (!d) return false; date = d; });
+  if (!date) take(B + "(?:on\\s+)?" + MW + "\\s+([0-3]?\\d)(?:st|nd|rd|th)?(?:,?\\s+(\\d{4}))?" + E, m => { const mo = monthOf(m[1]); if (mo < 0) return false; const d = mkDate(+m[2], mo, m[3] ? +m[3] : 0); if (!d) return false; date = d; });
+  // "25-го", "25 числа"
+  if (!date) take(B + "(?:на\\s+|до\\s+)?([0-3]?\\d)(?:-?го|\\s+числа)" + E, m => { const dd = +m[1]; if (dd < 1 || dd > 31) return false; let d = new Date(day0.getFullYear(), day0.getMonth(), dd); if (d < day0) d = new Date(day0.getFullYear(), day0.getMonth() + 1, dd); date = d; });
+  // weekdays
+  if (!date) for (let wd = 0; wd < 7 && !date; wd++) {
+    take(B + "(" + PRE + ")(" + W[wd][0] + ")" + E, m => {
+      const pre = (m[1] || "").toLowerCase(); const word = m[2].toLowerCase();
+      if (word.length <= 3 && !/^(пн|вт|ср|чт|пт|сб|нд|вс|вск|mon|tue|wed|thu|fri|sat|sun)$/.test(word)) return false;
+      if (word.length === 2 && !pre.trim()) return false; // bare "пн" only with a preposition
+      let k = (wd - day0.getDay() + 7) % 7; if (k === 0) k = /(цього|цей|цю|этот|эту|this)/.test(pre) ? 0 : 7;
+      if (/(наступн|следующ|next)/.test(pre) && k < 7 && /(наступного тижня|next week)/.test(s)) k += 7;
+      date = addD(k); });
+  }
+
+  if (!time && dayPart) time = dayPart;
+  if (time && !date) { const [h, mi] = time.split(":").map(Number); const t = new Date(day0); t.setHours(h, mi); date = t < now ? addD(1) : day0; }
+  let text = s.replace(/\s+([,.!?;:])/g, "$1").replace(/\s{2,}/g, " ").trim()
+    .replace(/(^|\s)(у|в|во|на|до|о|об|at|on|by)\s*([,.!?;:]|$)/giu, "$1$3").replace(/^[,.;:\-–—\s]+|[,;:\-–—\s]+$/g, "").replace(/\s{2,}/g, " ").trim();
+  if (!text) text = String(input || "").trim();
+  if (text && text[0] !== text[0].toUpperCase()) text = text[0].toUpperCase() + text.slice(1);
+  return { text, date: date ? ymd(date) : null, time };
+}
+
+
+const ymdOf=d=>{const z=n=>String(n).padStart(2,"0");return d.getFullYear()+"-"+z(d.getMonth()+1)+"-"+z(d.getDate())};
+const dayAdd=n=>{const d=new Date();d.setHours(0,0,0,0);d.setDate(d.getDate()+n);return ymdOf(d)};
+function fmtDay(y){if(!y)return"";const T0=todayStr();if(y===T0)return LL("сьогодні","today");if(y===dayAdd(1))return LL("завтра","tomorrow");if(y===dayAdd(2))return LL("післязавтра","day after tomorrow");
+  const d=new Date(y+"T12:00");const loc=S.settings.lang==="en"?"en-GB":"uk-UA";const o={weekday:"short",day:"numeric",month:"short"};if(d.getFullYear()!==new Date().getFullYear())o.year="numeric";return d.toLocaleDateString(loc,o)}
+function setWhen(it,date,time){ /* date: YYYY-MM-DD|null, time: HH:MM|null */
+  if(!date&&!time){it.today="";it.remindAt=null;return}
+  if(!date)date=todayStr();
+  it.today=date;it.carried=null;
+  if(time){const d=new Date(date+"T"+time);it.remindAt=isNaN(d)?null:d.toISOString();it.notified=false}else{it.remindAt=null}
+}
+let pend=null; /* {date,time} chosen for the next manual task */
+let whenFor=null; /* "new" | item id */
+function openWhen(target,anchorItem){
+  whenFor=target;const P=$("whenP");const cur=target==="new"?(pend||{}):(()=>{const it=S.items.find(i=>i.id===target);if(!it)return{};const r=it.remindAt?new Date(it.remindAt):null;return{date:it.today||null,time:r?String(r.getHours()).padStart(2,"0")+":"+String(r.getMinutes()).padStart(2,"0"):null}})();
+  const days=[0,1,2,3,4,5,6].map(k=>{const y=dayAdd(k);const d=new Date(y+"T12:00");const lab=k===0?LL("Сьогодні","Today"):k===1?LL("Завтра","Tomorrow"):d.toLocaleDateString(S.settings.lang==="en"?"en-GB":"uk-UA",{weekday:"short",day:"numeric"});return`<button type="button" data-d="${y}" aria-pressed="${cur.date===y}">${esc(lab)}</button>`}).join("");
+  const nw=dayAdd(((8-new Date().getDay())%7)||7);
+  P.innerHTML=`<div class="ttl">${esc(target==="new"?LL("Коли зробити нову справу?","When should the new task happen?"):LL("Перенести справу на…","Move this task to…"))}</div>
+   <div class="chips">${days}<button type="button" data-d="${nw}" aria-pressed="${cur.date===nw}">${esc(LL("Наст. тиждень","Next week"))}</button></div>
+   <div class="row"><input type="date" id="wDate" value="${cur.date||""}"><input type="time" id="wTime" value="${cur.time||""}">
+   <button class="btn" type="button" id="wOk">${esc(LL("Готово","Done"))}</button><button class="btn ghost" type="button" id="wNo">${esc(LL("Без дати","No date"))}</button></div>`;
+  P.hidden=false;
+  P.querySelectorAll("[data-d]").forEach(b=>b.onclick=()=>{$("wDate").value=b.dataset.d;P.querySelectorAll("[data-d]").forEach(x=>x.setAttribute("aria-pressed",x===b))});
+  $("wOk").onclick=()=>applyWhen($("wDate").value||null,$("wTime").value||null);
+  $("wNo").onclick=()=>applyWhen(null,null);
+}
+function applyWhen(date,time){
+  const P=$("whenP");P.hidden=true;
+  if(whenFor==="new"){pend=(date||time)?{date:date||null,time:time||null}:null;renderDateB();say.focus();return}
+  const it=S.items.find(i=>i.id===whenFor);if(!it)return;setWhen(it,date,time);save();render();
+  if(date||time)praise("📅 "+fmtDay(it.today)+(time?" · "+time:""));
+}
+function renderDateB(){const b=$("dateB");if(!b)return;if(pend){b.classList.add("set");b.textContent="📅 "+(pend.date?fmtDay(pend.date):"")+(pend.time?" "+pend.time:"")}else{b.classList.remove("set");b.textContent="📅"}}
+document.addEventListener("mousedown",e=>{const P=$("whenP");if(P&&!P.hidden&&!P.contains(e.target)&&e.target.id!=="dateB"&&!e.target.closest('[data-a="when"]'))P.hidden=true});
+/* ---------- gentle day: energy, carry-over, living sticker, awards, rituals, brief ---------- */
+const LL=(u,e)=>S.settings.lang==="en"?e:u;
+const ENERGY={low:{e:"😴",uk:"Мало сил",en:"Low"},mid:{e:"🙂",uk:"Нормально",en:"Okay"},high:{e:"⚡",uk:"Багато сил",en:"High"}};
+const energyToday=()=>{const x=S.settings.energy;return x&&x.date===todayStr()?x.level:null};
+function carryOver(){ /* undone tasks from earlier days move to today gently, never marked "overdue" */
+  const T0=todayStr();let ch=false;
+  for(const i of S.items){if(!i.done&&i.today&&i.today<T0){i.today=T0;i.carried=T0;ch=true}}
+  return ch;
+}
+function moodEmoji(){
+  const T0=todayStr(),h=new Date().getHours();const td=S.items.filter(isToday);const done=td.filter(i=>i.done).length,open=td.filter(i=>!i.done).length;
+  if(done>0&&open===0)return"🥳";if(done>=3)return"😎";if(done>0)return"😊";if(energyToday()==="low")return"🍵";if(h<10)return"😴";return"🙂";
+}
+function hop(){const m=$("me");m.classList.remove("hop");void m.offsetWidth;m.classList.add("hop")}
+function dayKey(iso){return (iso||"").slice(0,10)}
+function streak(){ /* consecutive days with at least one finished task; today counts only if something is done */
+  const days=new Set(S.items.filter(i=>i.done&&i.doneAt).map(i=>{const d=new Date(i.doneAt),z=n=>String(n).padStart(2,"0");return d.getFullYear()+"-"+z(d.getMonth()+1)+"-"+z(d.getDate())}));
+  let n=0;const d=new Date();if(!days.has(todayStr()))d.setDate(d.getDate()-1);
+  for(;;){const z=x=>String(x).padStart(2,"0");const k=d.getFullYear()+"-"+z(d.getMonth()+1)+"-"+z(d.getDate());if(days.has(k)){n++;d.setDate(d.getDate()-1)}else break}
+  return n;
+}
+const AWARDS=[
+ {id:"first",e:"🌱",uk:"Перша справа",en:"First task",ok:()=>S.items.some(i=>i.done)},
+ {id:"s3",e:"🔥",uk:"3 дні поспіль",en:"3-day streak",ok:()=>streak()>=3},
+ {id:"s7",e:"🌟",uk:"Тиждень поспіль",en:"7-day streak",ok:()=>streak()>=7},
+ {id:"d10",e:"🎖",uk:"10 справ",en:"10 tasks",ok:()=>S.items.filter(i=>i.done).length>=10},
+ {id:"d50",e:"🏆",uk:"50 справ",en:"50 tasks",ok:()=>S.items.filter(i=>i.done).length>=50},
+ {id:"all",e:"🎉",uk:"Усе за день",en:"All done in a day",ok:()=>{const td=S.items.filter(isToday);return td.length>1&&td.every(i=>i.done)}},
+ {id:"bird",e:"🐦",uk:"Рання пташка",en:"Early bird",ok:()=>S.items.some(i=>i.done&&i.doneAt&&new Date(i.doneAt).getHours()<9)},
+ {id:"kind",e:"🤍",uk:"Повернення після паузи",en:"Came back after a break",ok:()=>{const ds=[...new Set(S.items.filter(i=>i.done&&i.doneAt).map(i=>dayKey(i.doneAt)))].sort();for(let k=1;k<ds.length;k++){if((new Date(ds[k])-new Date(ds[k-1]))/864e5>=3)return true}return false}}];
+function checkAwards(){S.settings.awards=S.settings.awards||{};const got=[];
+  for(const a of AWARDS){if(!S.settings.awards[a.id]&&a.ok()){S.settings.awards[a.id]=todayStr();got.push(a)}}
+  if(got.length){const a=got[0];setTimeout(()=>{celebrate(null,a.e,true);praise(LL("Нова нагорода: ","New award: ")+a.e+" "+LL(a.uk,a.en))},700);save()}
+}
+const RITUALS=[
+ {e:"🌅",uk:"Ранок",en:"Morning",t:{uk:["Склянка води","5 хвилин розтяжки","Обрати 3 головні справи дня"],en:["Glass of water","5 minutes of stretching","Pick the day's 3 key tasks"]}},
+ {e:"💪",uk:"Тренування",en:"Workout",t:{uk:["Розминка 10 хв","Основне тренування","Розтяжка","Випити воду й поїсти білок"],en:["10-min warm-up","Main workout","Stretching","Water and protein"]}},
+ {e:"🌙",uk:"Вечір",en:"Evening",t:{uk:["Записати 3 речі, що вдалися","Підготувати речі на завтра","Телефон відкласти за годину до сну"],en:["Write 3 things that went well","Prepare things for tomorrow","Phone away an hour before bed"]}},
+ {e:"📅",uk:"Огляд тижня",en:"Weekly review",t:{uk:["Переглянути справи тижня","Обрати 3 цілі на наступний тиждень","Розібрати пошту й повідомлення"],en:["Review this week's tasks","Pick 3 goals for next week","Clear email and messages"]}},
+ {e:"🧘",uk:"Перезавантаження",en:"Reset",t:{uk:["10 хвилин прогулянки","Дихання 4-7-8","Одна маленька приємна справа для себе"],en:["10-minute walk","4-7-8 breathing","One small nice thing for yourself"]}}];
+function addRitual(r){const T0=todayStr();(r.t[S.settings.lang]||r.t.uk).forEach(x=>S.items.push({id:uid(),text:x,area:S.areas[S.areas.length-1],done:false,today:T0,createdAt:now(),by:"me",ritual:r.e}));save();render();praise(r.e+" "+LL(r.uk,r.en)+" — "+LL("додано на сьогодні","added for today"))}
+function saveRitual(){const td=S.items.filter(i=>isToday(i));if(!td.length)return;S.settings.myRituals=S.settings.myRituals||[];
+  S.settings.myRituals.push({e:"⭐",uk:LL("Мій ритуал ","My ritual ")+(S.settings.myRituals.length+1),en:"My ritual "+(S.settings.myRituals.length+1),t:{uk:td.map(i=>i.text),en:td.map(i=>i.text)}});save();render();praise("⭐ "+LL("Ритуал збережено","Ritual saved"))}
+let showRituals=false;
+function brief(){
+  const td=S.items.filter(i=>isToday(i)&&!i.done);const en=energyToday();const name=S.settings.name?", "+S.settings.name:"";
+  const h=new Date().getHours();const hi=h<12?LL("Доброго ранку","Good morning"):h<18?LL("Доброго дня","Good afternoon"):LL("Доброго вечора","Good evening");
+  let txt=hi+name+". ";
+  if(!td.length)txt+=LL("На сьогодні справ немає — можна відпочити або додати щось приємне.","Nothing planned for today — rest or add something nice.");
+  else{txt+=LL(`На сьогодні ${td.length} ${td.length===1?"справа":"справи"}. `,`You have ${td.length} task${td.length>1?"s":""} today. `);
+    const take=en==="low"?td.slice(0,2):td.slice(0,4);txt+=take.map((x,k)=>(k+1)+". "+x.text).join(". ")+". ";
+    if(en==="low")txt+=LL("Сьогодні м’який день — зробіть головне, решта почекає.","A gentle day — do the essentials, the rest can wait.");}
+  const st=streak();if(st>1)txt+=" "+LL(`Ви тримаєте ритм уже ${st} дні.`,`You've kept going for ${st} days.`);
+  try{const u=new SpeechSynthesisUtterance(txt);const vs=speechSynthesis.getVoices();const want=S.settings.lang==="en"?"en":"uk";
+    const v=vs.find(v=>v.lang&&v.lang.toLowerCase().startsWith(want))||vs.find(v=>v.lang&&v.lang.toLowerCase().startsWith("ru")&&want==="uk");
+    if(v){u.voice=v;u.lang=v.lang}else u.lang=want==="uk"?"uk-UA":"en-GB";u.rate=.98;speechSynthesis.cancel();speechSynthesis.speak(u)}catch(e){}
+  toast(LL("План дня","Day plan"),txt);
+}
+/* ---------- warm support (psychotherapist voice) ---------- */
+const MOODS={calm:["😌","Спокійно","Calm"],joyful:["😊","Радісно","Joyful"],tired:["🥱","Втома","Tired"],anxious:["😟","Тривожно","Anxious"],overwhelmed:["🤯","Забагато всього","Overwhelmed"],sad:["🌧","Сумно","Sad"]};
+const moodToday=()=>{const x=S.settings.mood;return x&&x.date===todayStr()?x.m:null};
+let supUI=null; /* null | "breathe" | "ground:N" | "savor" */
+function dayPick(arr,salt){let h=5381;for(const c of todayStr()+salt)h=((h<<5)+h+c.charCodeAt(0))>>>0;return arr[h%arr.length]}
+function supState(){const td=S.items.filter(isToday);const T0=todayStr();
+  const prev=S.items.filter(i=>i.done&&i.doneAt&&i.doneAt.slice(0,10)<T0).map(i=>i.doneAt.slice(0,10)).sort().pop();
+  const away=prev?Math.round((new Date(T0)-new Date(prev))/864e5):0;
+  return{done:td.filter(i=>i.done).length,open:td.filter(i=>!i.done).length,carried:td.filter(i=>!i.done&&i.carried===T0).length,energy:energyToday(),mood:moodToday(),hour:new Date().getHours(),streak:streak(),away,name:S.settings.name||""}}
+function supMsg(s){const you=s.name?", "+s.name:"";const ev=s.hour>=18,late=s.hour>=22,mo=s.hour<12;const M=(t,x,d,a)=>({t,x,d,a});
+  switch(s.mood){
+   case"anxious":return M(LL("Тривога — не вирок дню","Anxiety doesn’t decide your day"),dayPick([LL("Тривога часто говорить голосніше, ніж є насправді. Ти в безпеці тут і зараз.","Anxiety often speaks louder than reality. You are safe here and now."),LL("Помічаю, що тобі тривожно. Це нормальна реакція тіла, і вона мине.","I notice you feel anxious. It’s a normal body reaction, and it will pass."),LL("Не треба зараз розв’язувати все одразу. Досить одного видиху.","You don’t have to solve everything right now. One exhale is enough.")],"anx"),LL("Спершу заспокоїмо тіло, потім — одна маленька справа.","First calm the body, then one small task."),"breathe");
+   case"overwhelmed":return M(LL("Забагато — значить, час обирати","Too much means it’s time to choose"),dayPick([LL("Коли всього забагато, мозок застигає — це не лінь, це перевантаження.","When there’s too much, the mind freezes — that’s overload, not laziness."),LL("Ти не мусиш тягнути все сьогодні. Частина справ може почекати, і світ не впаде.","You don’t have to carry it all today. Some things can wait."),LL("Список — це лише список. Твій стан важливіший за нього.","A list is just a list. You matter more.")],"ovw"),LL("Залиш на сьогодні три головні справи, решту — з турботою на завтра.","Keep three things for today, move the rest to tomorrow."),"pickThree");
+   case"tired":return(ev||s.done>0)?M(LL("Втома — сигнал, а не провина","Tiredness is a signal, not a failure"),dayPick([LL("Твоє тіло просить паузи. Почути його — це теж дорослий вчинок.","Your body is asking for a pause. Listening is a grown-up choice too."),LL("Відпочинок — не нагорода за продуктивність. Він потрібен просто тому, що ти людина.","Rest isn’t a reward for productivity. You need it because you’re human.")],"tired"),LL("Заверши день м’яко: вода, тепло, ранній сон.","End the day softly: water, warmth, an early night."),"rest")
+                         :M(LL("День на зниженій швидкості","A slower-speed day"),dayPick([LL("Можна робити менше і все одно рухатись уперед.","You can do less and still move forward."),LL("Сьогодні достатньо найважливішого. Решта зачекає.","Today the essentials are enough.")],"tm"),LL("Обери одну справу на 10–15 хвилин, а потім перерва.","Pick one 10–15 min task, then a break."),"oneStep");
+   case"sad":return M(LL("Сум теж має право бути","Sadness is allowed too"),dayPick([LL("Не треба вдавати, що все добре. Дай собі трохи ніжності сьогодні.","You don’t have to pretend. Give yourself some tenderness today."),LL("Сумні дні проходять. А поки — стався до себе так само м’яко, як до близької людини.","Sad days pass. Be as kind to yourself as to a close friend.")],"sad"),LL("Одна маленька приємна справа для себе — чай, прогулянка, тепла ковдра.","One small nice thing for yourself — tea, a walk, a blanket."),"rest");
+   case"joyful":return M(LL("Збережи цей стан","Keep this feeling"),dayPick([LL("Як добре, що сьогодні радісно! Запам’ятай, що саме дало цей настрій.","How lovely it feels joyful today! Notice what brought it."),LL("Радість — гарне паливо. Використай її для справи, яку давно відкладено.","Joy is good fuel. Use it for something you’ve postponed.")],"joy"),LL("Зроби одну справу, яка давно чекає, — поки є сили.","Do one postponed thing while you have energy."),"savor");
+  }
+  if(s.away>=3&&s.done===0)return M(LL("З поверненням 🤍","Welcome back 🤍"),LL("Пауза — це частина шляху, а не його кінець. Ніхто тут тебе не сварить.","A pause is part of the path. Nobody here scolds you."),LL("Почни з найменшої справи — навіть на 5 хвилин.","Start with the smallest task — even 5 minutes."),"oneStep");
+  if(ev){
+    if(s.done===0)return M(late?LL("Час відпочивати","Time to rest"):LL("День без галочок — теж день","A day without ticks is still a day"),dayPick([LL("Сьогодні справ було небагато, і це нормально. Відпочинок — теж справа. Дай собі вечір без провини 🤍","Not much got done today, and that’s okay. Rest counts. An evening without guilt 🤍"),LL("Твоя цінність не вимірюється кількістю виконаного. Тебе вже достатньо.","Your worth isn’t measured in finished tasks. You are enough."),LL("Іноді найважливіша справа дня — просто вистояти. І це вдалося.","Sometimes the main task is simply getting through. You did.")],"e0"),LL("Перенеси справи на завтра спокійно — вони почекають.","Move tasks to tomorrow calmly — they’ll wait."),"planTomorrow");
+    if(s.open===0)return M(LL("Усе зроблено 🎉","All done 🎉"),dayPick([LL("Сьогодні вдалося все, що було заплановано. Пишаюся тобою! Тепер — тільки відпочинок.","You did everything you planned. I’m proud of you! Now rest."),LL("Чудовий день. Зупинись і відчуй це — сьогодні була гарна робота.","A wonderful day. Pause and feel it.")],"ea"),LL("Не шукай нових справ на вечір. Ти заслуговуєш на тишу.","No new tasks tonight. You deserve quiet."),"savor");
+    if(s.done>=8)return M(LL("Сьогодні зроблено багато","You did a lot today"),LL("Це вражає. Але сили не безмежні. Відпочинок сьогодні — це енергія на завтра.","Impressive. But energy isn’t endless. Rest tonight is energy for tomorrow."),LL("Постав межу: після цього — жодних робочих справ.","Set a boundary: no more work after this."),"rest");
+    return M(LL("Що вдалося сьогодні","What went well today"),dayPick([LL("Сьогодні зроблено "+s.done+". Кожна справа — це крок уперед.",s.done+" done today. Each one is a step."),LL("Не все вдалося встигнути? Так буває у всіх. Важливо, що ти рухаєшся.","Didn’t get to everything? That happens. What matters is moving."),LL("Подякуй собі за сьогодні. Решта спокійно почекає до завтра.","Thank yourself for today. The rest can wait.")],"ev"),LL("Перенеси незроблене на завтра і відпочинь.","Move the unfinished to tomorrow and rest."),"planTomorrow");
+  }
+  if(s.energy==="low")return M(LL("М’який день","A gentle day"),dayPick([LL("Сил сьогодні мало — тож і вимог до себе менше. Це не слабкість, це турбота.","Low energy — fewer demands. That’s care, not weakness."),LL("Зроби найважливіше і дозволь решті почекати.","Do the most important thing and let the rest wait.")],"low"),LL("Дві справи — і вже добре.","Two tasks — and that’s already good."),s.open>2?"pickThree":"oneStep");
+  if(s.open>=8)return M(LL("Список великий — і це нормально","A long list — and that’s okay"),LL("Коли справ багато, легко загубитись. Ти не мусиш зробити все — тільки найважливіше.","With many tasks it’s easy to get lost. Just what matters most."),LL("Обери три головні справи на сьогодні.","Choose the three main tasks for today."),"pickThree");
+  if(s.carried>0&&mo)return M(LL("Новий ранок — нова можливість","A new morning, a new chance"),LL("Деякі справи перейшли з учора. Це не провал — просто життя трохи змінило план.","Some tasks carried over. Not a failure — life changed the plan."),LL("Почни з однієї з них — найлегшої.","Start with the easiest one."),"oneStep");
+  if(!mo&&s.done===0&&s.open>0&&s.hour>=14)return M(LL("Почати ніколи не пізно","It’s never too late to start"),LL("Іноді найважче — перший крок. Не треба одразу все, досить п’яти хвилин.","The first step is the hardest. Five minutes is enough."),LL("Обери найменшу справу і зроби її зараз.","Pick the smallest task and do it now."),"oneStep");
+  if(s.streak>=3)return M(LL("Ти тримаєш ритм","You’re keeping the rhythm"),LL("Вже "+s.streak+" дні поспіль із перемогами. Гарна звичка росте тихо — як дерево.",s.streak+" days in a row. Good habits grow quietly — like a tree."),LL("Сьогодні достатньо однієї справи, щоб продовжити.","One task today is enough to continue."),"");
+  if(mo)return M(LL("Доброго ранку"+you+" ☀️","Good morning ☀️"),dayPick([LL("Новий день не вимагає ідеальності. Досить трохи уваги до себе.","A new day doesn’t demand perfection."),LL("Почни з того, що дає сили, а не забирає.","Start with what gives energy."),LL("Ти не машина для справ. Ти людина, яка робить те, що може.","You’re not a task machine. You do what you can.")],"m"),LL("Обери головну справу дня і почни з неї.","Pick today’s main task and start there."),"");
+  return M(LL("Ти на правильному шляху","You’re on the right path"),dayPick([LL("Крок за кроком — і день складається. Не забувай про паузи й воду.","Step by step the day comes together. Pauses and water."),LL("Зроблено "+s.done+". Помічай свої маленькі перемоги — вони важливі.",s.done+" done. Notice your small wins.")],"d"),LL("Зроби коротку перерву після наступної справи.","Take a short break after the next task."),"");
+}
+const SUPACT={breathe:["🌬 Дихальна пауза · 1 хв","🌬 Breathing pause · 1 min"],rest:["🛋 Дозволяю собі відпочити","🛋 I allow myself to rest"],oneStep:["👣 Обрати одну маленьку справу","👣 Pick one small task"],pickThree:["✨ Залишити 3 головні","✨ Keep the 3 that matter"],planTomorrow:["🌙 Спокійно перенести на завтра","🌙 Calmly move to tomorrow"],savor:["💛 Записати, що вдалося","💛 Note what went well"]};
+function supCard(){
+  if(S.settings.supHidden===todayStr())return `<div><button class="sup x" type="button" data-act="supshow">🤍 ${esc(LL("Тепла підтримка","Warm support"))}</button></div>`;
+  const s=supState(),m=supMsg(s);let h=`<div class="sup"><div class="h"><span>🤍 ${esc(LL("Тепла підтримка","Warm support"))}</span><button class="x" type="button" data-act="suphide">▴</button></div>`;
+  if(supUI==="breathe")return h+`<div class="breath"><div class="c" id="bc"></div><div id="bt">${esc(LL("Вдих","Breathe in"))}</div><button class="act" type="button" data-act="supclose">${esc(LL("Завершити","Finish"))}</button></div></div>`;
+  if(supUI==="savor")return h+`<div class="tt">${esc(LL("Що сьогодні вдалося?","What went well today?"))}</div><textarea id="savorIn" rows="2" style="width:100%;background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:10px;padding:6px" placeholder="${esc(LL("Сьогодні мені вдалося…","Today I managed to…"))}"></textarea><button class="act" type="button" data-act="savorsave">${esc(LL("Зберегти 💛","Save 💛"))}</button></div>`;
+  if(!s.mood)h+=`<div class="tt">${esc(LL("Як ти сьогодні?","How are you today?"))}</div><div class="moods">${Object.entries(MOODS).map(([k,v])=>`<button type="button" data-act="mood:${k}">${v[0]} ${esc(LL(v[1],v[2]))}</button>`).join("")}</div>`;
+  h+=`<div class="tt">${esc(m.t)}</div><div class="tx">${esc(m.x)}</div><div class="dir">→ ${esc(m.d)}</div>`;
+  if(m.a&&SUPACT[m.a])h+=`<button class="act" type="button" data-act="sup:${m.a}">${esc(LL(...SUPACT[m.a]))}</button>`;
+  if(s.mood)h+=` <button class="x" type="button" data-act="mood:">${MOODS[s.mood][0]} ${esc(LL("змінити настрій","change mood"))}</button>`;
+  return h+`</div>`;
+}
+let breathT=null;
+function startBreath(){clearTimeout(breathT);let left=6;const step=()=>{const c=$("bc"),t=$("bt");if(!c||supUI!=="breathe")return;
+  if(left--<=0){t.textContent=LL("Готово. Як ти зараз? 🤍","Done. How are you now? 🤍");return}
+  c.className="c in";t.textContent=LL("Вдих","Breathe in");breathT=setTimeout(()=>{if(!$("bc"))return;$("bc").className="c out";$("bt").textContent=LL("Видих","Breathe out");breathT=setTimeout(step,6000)},4000)};setTimeout(step,60)}
+function supAct(a){const T0=todayStr(),T1=dayAdd(1);const td=S.items.filter(i=>isToday(i)&&!i.done);
+  if(a==="breathe"){supUI="breathe";render();startBreath();return}
+  if(a==="savor"){supUI="savor";render();setTimeout(()=>$("savorIn")&&$("savorIn").focus(),50);return}
+  if(a==="rest"){S.items.push({id:uid(),text:LL("Час для відпочинку 🤍","Allowed myself to rest 🤍"),area:S.areas[S.areas.length-1],done:true,doneAt:now(),today:T0,reaction:"🤍",createdAt:now(),by:"me"});save();render();celebrate(null,"🤍",false);praise(LL("Відпочинок — теж справа 🤍","Rest counts too 🤍"));return}
+  if(a==="oneStep"){const f=td.slice().sort((x,y)=>x.text.length-y.text.length)[0];praise(f?LL("Почни з: ","Start with: ")+f.text:LL("Додай одну маленьку справу знизу 🌱","Add one small task below 🌱"));return}
+  if(a==="pickThree"){const r=td.slice(3);r.forEach(i=>{i.today=T1;i.carried=null});save();render();praise(r.length?LL("Залишено 3 головні, решту — на завтра 🤍","Kept 3, the rest moved to tomorrow 🤍"):LL("У тебе вже не більше трьох справ ✨","Three or fewer already ✨"));return}
+  if(a==="planTomorrow"){td.forEach(i=>{i.today=T1;i.carried=null});save();render();praise(LL("Перенесено на завтра. Відпочивай 🌙","Moved to tomorrow. Rest now 🌙"))}
+}
+/* ---------- render ---------- */
+let editing=null;
+function renderHead(){
+  const st=S.settings;
+  const me=$("me");me.className="me"+(st.sticker?" sticker":"");
+  me.innerHTML=st.sticker?`<img src="${st.sticker}" alt="">`:esc((st.name||"Я").trim().charAt(0).toUpperCase());
+  me.title=t("expand");$("titles").title=t("expand");
+  const open=S.items.filter(i=>!i.done).length,dn=S.items.filter(i=>i.done).length;
+  $("ttl").textContent=(st.font==="hand"?(st.expanded?t("all"):t("today")):(st.expanded?t("all"):t("today")).toUpperCase())+(st.expanded?"  ▴":"  ▾");
+  $("sub").textContent=st.expanded?`${t("openN")}: ${open} · ${t("doneN")}: ${dn}`:new Date().toLocaleDateString(loc(),{weekday:"long",day:"numeric",month:"long"})+(()=>{const T0=todayStr();const n=S.items.filter(i=>i.done&&(i.doneAt||"").slice(0,10)===T0).length;return n?` · ✓ ${n}`:""})();
+  $("pinB").textContent="📌";$("pinB").setAttribute("aria-pressed",String(!!st.pin));$("pinB").title=t("pin");
+  $("setB").title=t("settings");$("briefB").title=LL("Прослухати план дня","Listen to the day plan");$("minB").title=t("minimize");$("closeB").title=t("close");
+  $("say").placeholder=t("sayPh");$("addB").title=t("add");$("micB").title=t("mic");$("askB").title=t("ask");
+  const M=mode();$("askB").hidden=M==="claude"||M==="none";$("askB").disabled=M==="api"&&!apiReady();
+  $("askB").title=M==="chatgpt"?t("askGPT"):t("ask");
+  $("pasteB").hidden=M!=="chatgpt";
+  $("hint").innerHTML=esc(M==="claude"?(st.claudeSeen?t("hintClaude").replace("{c}",st.codeWord||"📌"):t("hintClaudeWait")):M==="chatgpt"?t("hintGPT"):M==="api"?t("hintAI"):t("hintNoAI"));
+}
+function row(it){
+  const due=it.remindAt&&!it.done&&new Date(it.remindAt)<=new Date();
+  if(editing===it.id)return `<div class="it" data-id="${it.id}"><span></span><input class="edit" id="editIn" value="${esc(it.text)}"><span></span></div>`;
+  return `<div class="it ${it.done?"done":""}" data-id="${it.id}">
+   <button class="ck" type="button" data-a="ck" aria-label="✓"></button>
+   <div class="tx" title="${esc(t("edit"))}"><div class="t" data-a="ed">${esc(it.text)}</div>
+    <div class="meta">${S.settings.expanded&&it.area?`<span class="chip">${esc(it.area)}</span>`:""}${!it.done&&it.today&&it.today>todayStr()&&!it.remindAt?`<span class="day">📅 ${esc(fmtDay(it.today))}</span>`:""}${it.remindAt&&!it.done?`<span class="rem ${due?"due":""}">🔔 ${esc(fmtRem(it.remindAt))}</span>`:""}${it.by==="ai"?`<span class="ai">✦ ${esc(t("fromAI"))}</span>`:""}${it.carried===todayStr()&&!it.done?`<span class="carried">${esc(LL("перенесено з турботою 🤍","carried over with care 🤍"))}</span>`:""}</div></div>
+   <div class="acts">${it.done&&S.settings.reactions!=="off"?`<button class="rx" type="button" data-a="rx" title="${esc(t("react"))}">${esc(it.reaction||"＋")}</button>`:""}${it.done?"":`<button class="ic" type="button" data-a="when" title="${esc(LL("Дата і час","Date & time"))}">📅</button>`}${it.done?"":`<button class="ic sun ${isToday(it)?"on":""}" type="button" data-a="sun" title="${esc(isToday(it)?t("sunOn"):t("sunOff"))}">☀</button>`}<button class="ic" type="button" data-a="del" title="${esc(t("del"))}">✕</button></div></div>`;
+}
+function render(){
+  renderHead();
+  const L=$("list"),st=S.settings;let h="";
+  const td=S.items.filter(i=>isToday(i)&&!(S.settings.doneMode==="hide"&&i.done&&!st.expanded)).sort((a,b)=>(a.done-b.done)||(a.remindAt||"z").localeCompare(b.remindAt||"z"));
+  const en=energyToday();
+  const enCard=`<div class="card"><div>${esc(LL("Як твоя енергія сьогодні?","How’s your energy today?"))}</div><div class="row en">${Object.entries(ENERGY).map(([k,v])=>`<button type="button" data-en="${k}" aria-pressed="${en===k}">${v.e} ${esc(LL(v.uk,v.en))}</button>`).join("")}</div></div>`;
+  if(!st.expanded){
+    const open=td.filter(i=>!i.done);
+    if(!en)h+=enCard;
+    h+=supCard();
+    if(en==="low"&&open.length>2){
+      const focus=new Set(open.slice(0,2).map(i=>i.id));
+      h+=`<div class="card">🍵 ${esc(LL("М’який день: зосередься на двох справах. Решту можна спокійно перенести.","Gentle day: focus on two tasks. The rest can wait."))}<div class="row"><button class="btn" type="button" data-act="defer">${esc(LL("Перенести решту на завтра","Move the rest to tomorrow"))}</button></div></div>`;
+      h+=td.map(i=>focus.has(i.id)||i.done?row(i):row(i).replace('class="it ','class="it dim ')).join("");
+    }else h+=td.length?td.map(row).join(""):`<p class="empty">${esc(t("emptyToday"))}</p>`;
+    if(en==="high"){const more=S.items.filter(i=>!i.done&&!isToday(i)).slice(0,3);if(more.length)h+=`<div class="sec">⚡ ${esc(LL("Є сили — можна взяти","Feeling strong — you could take"))}</div>`+more.map(row).join("")}
+    const T1=dayAdd(1);const tmr=S.items.filter(i=>!i.done&&i.today===T1);
+    if(tmr.length)h+=`<div class="sec">🌙 ${esc(LL("Завтра","Tomorrow"))}<span class="n">${tmr.length}</span></div>`+tmr.map(row).join("");
+    const rem=S.items.filter(i=>!i.done&&i.remindAt&&!isToday(i)&&i.today!==T1&&new Date(i.remindAt)-new Date()<36e5*24&&new Date(i.remindAt)>new Date());
+    if(rem.length)h+=`<div class="sec">${esc(t("reminders"))}<span class="n">${rem.length}</span></div>`+rem.map(row).join("");
+  }else{
+    const sk=streak();S.settings.awards=S.settings.awards||{};
+    h+=`<div class="card"><div>🔥 ${esc(LL("Дні з перемогами поспіль","Days in a row with a win"))}: <b class="streak">${sk}</b>${sk===0?" · "+esc(LL("почнімо з маленької справи 🤍","let’s start with something small 🤍")):""}</div>
+     <div class="awards">${AWARDS.map(a=>`<span class="aw ${S.settings.awards[a.id]?"":"no"}" title="${esc(LL(a.uk,a.en))}">${a.e} ${esc(LL(a.uk,a.en))}</span>`).join("")}</div>
+     <div class="row"><button class="btn" type="button" data-act="rituals">✨ ${esc(LL("Ритуали","Rituals"))}</button>${en?`<span class="note">${ENERGY[en].e} ${esc(LL(ENERGY[en].uk,ENERGY[en].en))}</span>`:""}</div>
+     ${showRituals?`<div class="rit" style="margin-top:8px">${[...RITUALS,...(st.myRituals||[])].map((r,k)=>`<button type="button" data-rit="${k}">${r.e} <b>${esc(LL(r.uk,r.en))}</b> <span class="note">· ${esc((r.t[st.lang]||r.t.uk).join(", "))}</span></button>`).join("")}<button type="button" data-act="saverit">⭐ ${esc(LL("Зберегти сьогоднішні справи як мій ритуал","Save today’s tasks as my ritual"))}</button></div>`:""}</div>`;
+    if(!en)h+=enCard;
+    h+=supCard();
+    h+=`<div class="sec">☀ ${esc(t("today"))}<span class="n">${td.filter(i=>!i.done).length}</span></div>`+(td.length?td.map(row).join(""):`<p class="empty">${esc(t("emptyToday"))}</p>`);
+    const open=S.items.filter(i=>!i.done&&!isToday(i));
+    const T0=todayStr();const plan=open.filter(i=>i.today&&i.today>T0).sort((a,b)=>(a.today+(a.remindAt||"")).localeCompare(b.today+(b.remindAt||"")));
+    if(plan.length){h+=`<div class="sec">📅 ${esc(LL("Заплановано","Planned"))}<span class="n">${plan.length}</span></div>`;let last="";for(const i of plan){if(i.today!==last){last=i.today;h+=`<div class="wd">${esc(fmtDay(i.today))}</div>`}h+=row(i)}}
+    const rem=open.filter(i=>i.remindAt&&!(i.today&&i.today>T0)).sort((a,b)=>a.remindAt.localeCompare(b.remindAt));
+    if(rem.length)h+=`<div class="sec">🔔 ${esc(t("reminders"))}<span class="n">${rem.length}</span></div>`+rem.map(row).join("");
+    const rest=open.filter(i=>!i.remindAt&&!(i.today&&i.today>T0));
+    const areas=[...S.areas,...new Set(rest.map(i=>i.area).filter(a=>a&&!S.areas.includes(a)))];
+    for(const a of areas){const g=rest.filter(i=>(i.area||S.areas[S.areas.length-1])===a);if(g.length)h+=`<div class="sec">${esc(a)}<span class="n">${g.length}</span></div>`+g.map(row).join("")}
+    const dn=S.items.filter(i=>i.done&&!isToday(i)).sort((a,b)=>(b.doneAt||"").localeCompare(a.doneAt||""));
+    if(dn.length)h+=`<div class="sec">✓ ${esc(t("done"))}<span class="n">${dn.length}</span></div>`+dn.map(row).join("");
+    if(!S.items.length)h=`<p class="empty">${esc(t("emptyAll"))}</p>`;
+  }
+  L.innerHTML=h;
+  $("mood").textContent=moodEmoji();
+  if(editing){const e=$("editIn");if(e){e.focus();e.select();
+    const fin=ok=>{const it=S.items.find(i=>i.id===editing);if(ok&&it&&e.value.trim())it.text=e.value.trim();editing=null;save();render()};
+    e.onkeydown=ev=>{if(ev.key==="Enter")fin(true);if(ev.key==="Escape")fin(false)};e.onblur=()=>fin(true)}}
+}
+$("list").addEventListener("click",e=>{
+  const ee=e.target.closest("[data-en]");if(ee){S.settings.energy={date:todayStr(),level:ee.dataset.en};save();render();hop();praise(ENERGY[ee.dataset.en].e+" "+LL({low:"Бережемо сили сьогодні",mid:"Спокійний робочий день",high:"Чудово, вперед!"}[ee.dataset.en],{low:"Saving energy today",mid:"A calm working day",high:"Great, let’s go!"}[ee.dataset.en]));return}
+  const ac=e.target.closest("[data-act]");if(ac){const k=ac.dataset.act;
+    if(k.startsWith("mood:")){const m=k.slice(5);S.settings.mood=m?{date:todayStr(),m}:null;supUI=null;save();render();if(m)praise(MOODS[m][0]+" "+LL("Дякую, що поділились","Thank you for sharing"));return}
+    if(k.startsWith("sup:")){supAct(k.slice(4));return}
+    if(k==="suphide"){S.settings.supHidden=todayStr();supUI=null;save();render();return}
+    if(k==="supshow"){S.settings.supHidden=null;save();render();return}
+    if(k==="supclose"){supUI=null;clearTimeout(breathT);render();return}
+    if(k==="savorsave"){const v=($("savorIn").value||"").trim();supUI=null;if(v){S.items.push({id:uid(),text:"💛 "+v,area:S.areas[S.areas.length-1],done:true,doneAt:now(),today:todayStr(),reaction:"💛",createdAt:now(),by:"me"});celebrate(null,"💛",true)}save();render();return}
+    if(k==="defer"){const T0=todayStr();const tm=new Date();tm.setDate(tm.getDate()+1);const z=n=>String(n).padStart(2,"0");const T1=tm.getFullYear()+"-"+z(tm.getMonth()+1)+"-"+z(tm.getDate());
+      const open=S.items.filter(i=>isToday(i)&&!i.done);open.slice(2).forEach(i=>{i.today=T1;i.carried=null});save();render();praise(LL("Перенесено на завтра 🤍","Moved to tomorrow 🤍"))}
+    if(k==="rituals"){showRituals=!showRituals;render()}
+    if(k==="saverit")saveRitual();
+    return}
+  const rr=e.target.closest("[data-rit]");if(rr){const all=[...RITUALS,...(S.settings.myRituals||[])];addRitual(all[+rr.dataset.rit]);showRituals=false;render();return}
+  const b=e.target.closest("[data-a]");if(!b)return;const id=b.closest("[data-id]")?.dataset.id;const it=S.items.find(i=>i.id===id);if(!it)return;
+  const a=b.dataset.a;
+  if(a==="ck"){it.done=!it.done;it.doneAt=it.done?now():null;if(it.done){save();render();const el=document.querySelector(`[data-id="${it.id}"] .ck`);onCompleted(it,el);save();render();return}}
+  else if(a==="rx"){e.stopPropagation();openPicker(b,it);return}
+  else if(a==="when"){e.stopPropagation();openWhen(it.id);return}
+  else if(a==="sun"){it.today=isToday(it)?"":todayStr();}
+  else if(a==="del"){S.items=S.items.filter(i=>i!==it);}
+  else return;
+  save();render();
+});
+$("list").addEventListener("dblclick",e=>{const b=e.target.closest('[data-a="ed"]');if(!b)return;editing=b.closest("[data-id]").dataset.id;render()});
+/* ---------- header actions ---------- */
+const toggleExpand=async()=>{S.settings.expanded=!S.settings.expanded;save();render();await applyWindow()};
+$("me").onclick=toggleExpand;$("titles").onclick=toggleExpand;
+$("briefB").onclick=brief;
+$("pinB").onclick=async()=>{S.settings.pin=!S.settings.pin;save();renderHead();await applyWindow()};
+$("minB").onclick=()=>{if(IS_NL)Neutralino.window.minimize()};
+$("closeB").onclick=async()=>{await saveNow();await releaseLock();if(IS_NL)Neutralino.app.exit();else window.close()};
+$("setB").onclick=()=>openSettings();
+/* ---------- input ---------- */
+const say=$("say");
+say.addEventListener("input",()=>{say.style.height="auto";say.style.height=Math.min(110,say.scrollHeight)+"px"});
+say.addEventListener("keydown",e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();mode()==="api"&&apiReady()?ask():addPlain()}});
+$("addB").onclick=addPlain;$("dateB").onclick=()=>{const P=$("whenP");if(!P.hidden&&whenFor==="new"){P.hidden=true;return}openWhen("new")};$("askB").onclick=()=>mode()==="chatgpt"?askGPT():ask();$("pasteB").onclick=pasteGPT;
+function addPlain(){const v=say.value.trim();if(!v)return;
+  const w=parseWhen(v);const date=pend&&pend.date||w.date,time=pend&&pend.time||w.time;
+  const it={id:uid(),text:(w.date||w.time)?w.text:v,area:S.areas[S.areas.length-1],done:false,today:S.settings.expanded?"":todayStr(),createdAt:now(),by:"me"};
+  if(date||time)setWhen(it,date,time);
+  S.items.push(it);say.value="";say.style.height="auto";pend=null;renderDateB();save();render();
+  if(date&&date!==todayStr())praise("📅 "+fmtDay(it.today)+(time?" · "+time:"")+" — "+LL("заплановано","planned"));}
+function showReply(txt,bad){const r=$("reply");r.hidden=!txt;r.textContent=txt||"";r.className="reply"+(bad?" err":"");clearTimeout(showReply.t);if(txt&&!bad)showReply.t=setTimeout(()=>r.hidden=true,12000)}
+/* ---------- AI ---------- */
+async function llm(system,user,max=900,images=[],json=true){
+  const st=S.settings;
+  if(st.provider==="openai"){
+    const r=await fetch("https://api.openai.com/v1/chat/completions",{method:"POST",headers:{"content-type":"application/json","authorization":"Bearer "+st.openaiKey},
+      body:JSON.stringify(Object.assign({model:st.openaiModel,messages:[{role:"system",content:system},{role:"user",content:images.length?[{type:"text",text:user},...images.map(d=>({type:"image_url",image_url:{url:d}}))]:user}]},json?{response_format:{type:"json_object"}}:{}))});
+    const j=await r.json().catch(()=>({}));if(!r.ok)throw new Error(j?.error?.message||("HTTP "+r.status));
+    return j.choices?.[0]?.message?.content||"";
+  }
+  const r=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"content-type":"application/json","x-api-key":st.claudeKey,"anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true"},
+    body:JSON.stringify({model:st.claudeModel,max_tokens:max,system,messages:[{role:"user",content:images.length?[...images.map(d=>({type:"image",source:{type:"base64",media_type:d.slice(5,d.indexOf(";")),data:d.slice(d.indexOf(",")+1)}})),{type:"text",text:user}]:user}]})});
+  const j=await r.json().catch(()=>({}));if(!r.ok)throw new Error(j?.error?.message||("HTTP "+r.status));
+  return (j.content||[]).filter(b=>b.type==="text").map(b=>b.text).join("");
+}
+async function ask(){
+  const msg=say.value.trim();if(!msg||!aiReady())return;
+  $("askB").disabled=true;showReply(t("thinking"));
+  const lang=S.settings.lang==="en"?"English":"Ukrainian";
+  const nowD=new Date();
+  const open=S.items.filter(i=>!i.done).map(i=>`${i.id} | ${i.text} | section: ${i.area||"-"} | today: ${isToday(i)?"yes":"no"}${i.today&&i.today>todayStr()?" | date: "+i.today:""}${i.remindAt?" | reminder: "+i.remindAt:""}`).join("\n")||"(none)";
+  const done=S.items.filter(i=>i.done).slice(-12).map(i=>`${i.id} | ${i.text}`).join("\n")||"(none)";
+  const sys=`You are the assistant inside a personal notes & to-do app. The user writes casually (often dictated, maybe with typos) in any language; you turn it into actions on their list.
+${aiRules()}
+Return JSON only.`;
+  const user=`Open tasks:\n${open}\n\nRecently done:\n${done}\n\nUser message:\n${msg}`;
+  try{
+    const txt=await llm(sys,user);
+    const j=JSON.parse(txt.slice(txt.indexOf("{"),txt.lastIndexOf("}")+1));
+    const n=applyActions(j);
+    save();render();say.value="";say.style.height="auto";
+    showReply((j.reply||"")+(n?"":"\n"+t("noChange")));
+  }catch(e){showReply(e.message||String(e),true)}
+  $("askB").disabled=!aiReady();
+}
+function calText(){const out=[];for(let k=0;k<15;k++){const y=dayAdd(k);out.push(new Date(y+"T12:00").toLocaleDateString("en-GB",{weekday:"long"})+" "+y+(k===0?" (today)":k===1?" (tomorrow)":""))}return out.join("; ")}
+function aiRules(){const lang=S.settings.lang==="en"?"English":"Ukrainian";return `Now: ${new Date().toString()} (local time). Reply language: ${lang}.
+Calendar (use it to resolve weekdays and dates): ${calText()}.
+Rules:
+- New task → one clear, short, actionable line in ${lang}; keep names, places, amounts. If several tasks are mentioned, add each.
+- If the user says something is finished, mark the matching open task done. "undo/not done" → reopen.
+- Understand weekdays, dates, month names and times in any language (у четвер / в четверг / on Thursday, 25 жовтня, 28.10, завтра, післязавтра, через 3 дні, наступного тижня, о 18:00, в 3 часа дня, ввечері).
+- "today/now" → date = today. A day without a time ("у четвер") → date:"YYYY-MM-DD", remind_at:null — the task appears in Today on that day. A day with a time → date plus remind_at "YYYY-MM-DDTHH:MM". Remove the date/time words from the task text.
+- Choose section only from: ${S.areas.join(", ")}.
+- Only use ids from the lists. Do not invent tasks the user didn't ask for.
+JSON format: {"reply":"1–2 friendly sentences in ${lang} saying what you did","actions":[{"type":"add","text":"...","section":"...","date":null,"remind_at":null},{"type":"done","id":"..."},{"type":"reopen","id":"..."},{"type":"edit","id":"...","text":"..."},{"type":"delete","id":"..."},{"type":"today","id":"...","value":true},{"type":"remind","id":"...","remind_at":"YYYY-MM-DDTHH:MM"},{"type":"date","id":"...","date":"YYYY-MM-DD"}]}`}
+function listForAI(){return "Open tasks:\n"+(S.items.filter(i=>!i.done).map(i=>`${i.id} | ${i.text} | section: ${i.area||"-"} | today: ${isToday(i)?"yes":"no"}${i.today&&i.today>todayStr()?" | date: "+i.today:""}${i.remindAt?" | reminder: "+i.remindAt:""}`).join("\n")||"(none)")}
+async function askGPT(){
+  const msg=say.value.trim();if(!msg)return;
+  const q=`Ти — помічник нотатника «Затишок». Перетвори моє повідомлення на дії з моїм списком справ.
+${aiRules()}
+Відповідай ТІЛЬКИ JSON у блоці коду, без іншого тексту.
+
+${listForAI()}
+
+Моє повідомлення:
+${msg}`;
+  const url="https://chatgpt.com/?q="+encodeURIComponent(q.slice(0,7000));
+  await openExt(url);say.value="";say.style.height="auto";showReply(t("gptSent"));
+}
+async function pasteGPT(){
+  let txt="";try{txt=IS_NL?await Neutralino.clipboard.readText():await navigator.clipboard.readText()}catch(e){}
+  if(!txt||txt.indexOf("{")<0){showReply(t("pasteNone"),true);return}
+  try{const j=JSON.parse(txt.slice(txt.indexOf("{"),txt.lastIndexOf("}")+1));const n=applyActions(j);save();render();showReply((j.reply||"✓")+(n?"":"\n"+t("noChange")))}
+  catch(e){showReply(t("pasteNone"),true)}
+}
+async function openExt(u){if(IS_NL){try{await Neutralino.os.open(u);return}catch(e){}}window.open(u,"_blank")}
+async function copyText(x){try{if(IS_NL)await Neutralino.clipboard.writeText(x);else await navigator.clipboard.writeText(x);return true}catch(e){return false}}
+function applyActions(j){
+    let n=0;const T0=todayStr();
+    for(const a of j.actions||[]){
+      const it=a.id&&S.items.find(i=>i.id===a.id);
+      const rem=v=>{if(!v)return null;const d=new Date(v);return isNaN(d)?null:d.toISOString()};
+      const okD=v=>typeof v==="string"&&/^\d{4}-\d{2}-\d{2}$/.test(v)?v:null;
+      if(a.type==="add"&&a.text){const ni={id:uid(),text:String(a.text),area:S.areas.includes(a.section)?a.section:S.areas[S.areas.length-1],done:false,today:a.today?T0:"",remindAt:rem(a.remind_at),createdAt:now(),by:"ai"};
+        let d=okD(a.date);if(!d&&ni.remindAt){const r=new Date(ni.remindAt);d=ymdOf(r)}
+        if(!d&&!ni.remindAt){const w=parseWhen(ni.text);if(w.date||w.time){ni.text=w.text;setWhen(ni,w.date,w.time)}}
+        if(d){ni.today=d;}S.items.push(ni);n++}
+      else if(a.type==="date"&&it){const d=okD(a.date);it.today=d||"";it.carried=null;n++}
+      else if(a.type==="done"&&it){it.done=true;it.doneAt=now();n++}
+      else if(a.type==="reopen"&&it){it.done=false;it.doneAt=null;n++}
+      else if(a.type==="edit"&&it&&a.text){it.text=String(a.text);n++}
+      else if(a.type==="delete"&&it){S.items=S.items.filter(i=>i!==it);n++}
+      else if(a.type==="today"&&it){it.today=a.value===false?"":T0;n++}
+      else if(a.type==="remind"&&it){it.remindAt=rem(a.remind_at);it.notified=false;if(it.remindAt){const r=new Date(it.remindAt);it.today=ymdOf(r)}n++}
+    }
+    return n;
+}
+/* ---------- voice ---------- */
+let mr=null,chunks=[];
+$("micB").onclick=async()=>{
+  if(mr){mr.stop();return}
+  if(!S.settings.openaiKey||!navigator.mediaDevices?.getUserMedia||typeof MediaRecorder==="undefined"){say.focus();showReply(t("micWin"));return}
+  let stream;try{stream=await navigator.mediaDevices.getUserMedia({audio:true})}catch(e){say.focus();showReply(t("micDenied")+" "+t("micWin"),true);return}
+  chunks=[];mr=new MediaRecorder(stream);
+  mr.ondataavailable=e=>{if(e.data.size)chunks.push(e.data)};
+  mr.onstop=async()=>{stream.getTracks().forEach(x=>x.stop());$("micB").classList.remove("rec");mr=null;
+    const blob=new Blob(chunks,{type:chunks[0]?.type||"audio/webm"});showReply(t("thinking"));
+    try{const fd=new FormData();fd.append("file",blob,"voice.webm");fd.append("model","gpt-4o-mini-transcribe");
+      const r=await fetch("https://api.openai.com/v1/audio/transcriptions",{method:"POST",headers:{authorization:"Bearer "+S.settings.openaiKey},body:fd});
+      const j=await r.json().catch(()=>({}));if(!r.ok)throw new Error(j?.error?.message||("HTTP "+r.status));
+      say.value=(say.value?say.value+" ":"")+(j.text||"").trim();say.dispatchEvent(new Event("input"));showReply("");
+      if(aiReady())ask();
+    }catch(e){showReply(e.message,true)}};
+  mr.start();$("micB").classList.add("rec");showReply(t("listening"));
+};
+/* ---------- reminders ---------- */
+function toast(title,text){const el=$("toast");el.innerHTML=`<b>🔔 ${esc(title)}</b>${esc(text)}`;el.hidden=false;clearTimeout(toast.t);toast.t=setTimeout(()=>el.hidden=true,15000)}
+$("toast").onclick=()=>$("toast").hidden=true;
+async function checkReminders(){
+  let ch=false;
+  const lead=(S.settings.remindLead||0)*60000;
+  for(const it of S.items){if(it.done||!it.remindAt||it.notified)continue;if(new Date(it.remindAt).getTime()-lead<=Date.now()){it.notified=true;it.today=todayStr();ch=true;
+    toast(t("remindTitle"),it.text);
+    if(IS_NL){try{await Neutralino.os.showNotification(t("remindTitle"),it.text)}catch(e){}try{await Neutralino.window.show()}catch(e){}}}}
+  const st=S.settings,T0=todayStr(),hm=new Date().toTimeString().slice(0,5);
+  if(st.morning&&hm>=st.morning&&st.lastMorning!==T0){st.lastMorning=T0;ch=true;const td=S.items.filter(i=>isToday(i)&&!i.done);
+    const txt=td.length?td.slice(0,4).map(i=>"• "+i.text).join("\n"):t("emptyToday");toast(t("morningT"),txt);if(IS_NL){try{await Neutralino.os.showNotification(t("morningT"),txt)}catch(e){}}}
+  if(st.evening&&hm>=st.evening&&st.lastEvening!==T0){st.lastEvening=T0;ch=true;const dn=S.items.filter(i=>i.done&&(i.doneAt||"").slice(0,10)===T0).length,op=S.items.filter(i=>isToday(i)&&!i.done).length;
+    const ss=supState();ss.hour=20;const mm=supMsg(ss);const txt=mm.x+" "+mm.d;toast(t("eveningT"),txt);if(IS_NL){try{await Neutralino.os.showNotification(t("eveningT"),txt)}catch(e){}}}
+  if(ch){save();render()}
+}
+/* ---------- settings ---------- */
+function openSettings(){
+  const st=S.settings,P=$("set");P.hidden=false;
+  P.innerHTML=`<div class="head"><div id="dragbar2" style="flex:1"><button class="link" id="sBack" type="button">${esc(t("back"))}</button></div></div>
+  <div class="scroll">
+   <h3>${esc(t("connSec"))}</h3>
+   <div class="seg" style="flex-wrap:wrap">${["claude","chatgpt","api","none"].map(m=>`<button type="button" data-am="${m}" aria-pressed="${mode()===m}">${esc(t({claude:"connClaude",chatgpt:"connGPT",api:"connAPI",none:"connNone"}[m]))}</button>`).join("")}</div>
+   ${mode()==="claude"?`<label class="f">${esc(t("codeWord"))}<input class="i" id="cw" value="${esc(st.codeWord||"")}" maxlength="20"><span class="note">${esc(t("codeHelp"))}</span></label>`:""}
+   <div id="apiBox" ${mode()==="api"?"":"hidden"}>
+   <h3>${esc(t("aiSec"))}</h3>
+   <div class="seg"><button type="button" data-p="claude" aria-pressed="${st.provider==="claude"}">Claude</button><button type="button" data-p="openai" aria-pressed="${st.provider==="openai"}">ChatGPT</button></div>
+   <label class="f">Claude · ${esc(t("key"))}<input class="i" id="kC" type="password" value="${esc(st.claudeKey)}" placeholder="sk-ant-…" autocomplete="off"></label>
+   <p class="note" style="margin:-6px 0 8px">${esc(t("keyHelpC"))}</p>
+   <label class="f">ChatGPT (OpenAI) · ${esc(t("key"))}<input class="i" id="kO" type="password" value="${esc(st.openaiKey)}" placeholder="sk-…" autocomplete="off"></label>
+   <p class="note" style="margin:-6px 0 8px">${esc(t("keyHelpO"))}</p>
+   <div class="row"><label class="f" style="flex:1">Claude · ${esc(t("model"))}<input class="i" id="mC" value="${esc(st.claudeModel)}"></label><label class="f" style="flex:1">ChatGPT · ${esc(t("model"))}<input class="i" id="mO" value="${esc(st.openaiModel)}"></label></div>
+   <div class="row"><button class="btn" type="button" id="tst">${esc(t("test"))}</button><span class="note" id="tstM">${esc(t("keyLocal"))}</span></div>
+   </div>
+   <h3>${esc(t("youSec"))}</h3>
+   <label class="f">${esc(t("name"))}<input class="i" id="nm" value="${esc(st.name)}"></label>
+   <div class="f">${esc(t("sticker"))}<div class="row">${st.sticker?`<img src="${st.sticker}" style="width:52px;height:52px;object-fit:contain" alt="">`:""}<button class="btn" type="button" id="stU">${esc(t("upload"))}</button>${st.sticker?`<button class="btn" type="button" id="stR">${esc(t("remove"))}</button>`:""}<input type="file" id="stF" accept="image/*" hidden></div></div>
+   <h3>${esc(t("areasSec"))}</h3>
+   <label class="f"><input class="i" id="ar" value="${esc(S.areas.join(", "))}"><span class="note">${esc(t("areasHelp"))}</span></label>
+   <h3>${esc(t("rxSec"))}</h3>
+   <div class="seg" style="flex-wrap:wrap">${["cute","sport","nature","calm","off"].map(k=>`<button type="button" data-rx="${k}" aria-pressed="${(st.reactions||"cute")===k}">${k==="off"?"":PACKS[k].slice(0,3).join("")+" "}${esc(t("rxNames")[k])}</button>`).join("")}</div>
+   <h3>${esc(t("appSec"))}</h3>
+   <div class="seg"><button type="button" data-l="uk" aria-pressed="${st.lang==="uk"}">Українська</button><button type="button" data-l="en" aria-pressed="${st.lang==="en"}">English</button></div>
+   ${IS_NL&&NL_OS==="Windows"?`<label class="switch"><input type="checkbox" id="au" ${st.autostart?"checked":""}> ${esc(t("autostart"))}</label>`:""}
+   <label class="switch"><input type="checkbox" id="pn" ${st.pin?"checked":""}> ${esc(t("pin"))}</label>
+   <button class="btn" type="button" id="redo" style="margin:4px 0 10px">✦ ${esc(t("redoSetup"))}</button>
+   <h3>${esc(t("dataSec"))}</h3>
+   <div class="row"><button class="btn" type="button" id="ex">${esc(t("exportB"))}</button><button class="btn" type="button" id="imB">${esc(t("importB"))}</button><input type="file" id="im" accept=".json,application/json" hidden></div>
+   <p class="note" id="dM"></p>
+  </div>`;
+  const re=()=>{save();applyTheme();openSettings();render()};
+  $("sBack").onclick=()=>{P.hidden=true;render()};
+  P.querySelectorAll("[data-p]").forEach(b=>b.onclick=()=>{st.provider=b.dataset.p;re()});
+  if($("cw"))$("cw").oninput=e=>{st.codeWord=e.target.value.trim();save()};
+  P.querySelectorAll("[data-rx]").forEach(b=>b.onclick=()=>{st.reactions=b.dataset.rx;re();if(pack())celebrate(b,pack()[0],false)});
+  P.querySelectorAll("[data-am]").forEach(b=>b.onclick=()=>{st.aiMode=b.dataset.am;re()});
+  P.querySelectorAll("[data-l]").forEach(b=>b.onclick=()=>{st.lang=b.dataset.l;localizeDefaults();re()});
+  $("kC").oninput=e=>{st.claudeKey=e.target.value.trim();save()};$("kO").oninput=e=>{st.openaiKey=e.target.value.trim();save()};
+  $("mC").onchange=e=>{st.claudeModel=e.target.value.trim()||"claude-sonnet-5-5";save()};$("mO").onchange=e=>{st.openaiModel=e.target.value.trim()||"gpt-6-luna";save()};
+  $("tst").onclick=async()=>{$("tstM").className="note";$("tstM").textContent="…";try{await llm('Reply with JSON {"ok":true}',"ping",20);$("tstM").className="note ok";$("tstM").textContent=t("testOk")}catch(e){$("tstM").className="note bad";$("tstM").textContent=e.message}};
+  $("nm").oninput=e=>{st.name=e.target.value;save();renderHead()};
+  $("stU").onclick=()=>$("stF").click();if($("stR"))$("stR").onclick=()=>{st.sticker="";re()};
+  $("stF").onchange=()=>{const f=$("stF").files[0];if(!f)return;const img=new Image();img.onload=()=>{const c=document.createElement("canvas"),z=180,sc=Math.min(z/img.width,z/img.height);c.width=c.height=z;c.getContext("2d").drawImage(img,(z-img.width*sc)/2,(z-img.height*sc)/2,img.width*sc,img.height*sc);st.sticker=c.toDataURL("image/png");re()};img.src=URL.createObjectURL(f)};
+  $("ar").onchange=e=>{const a=e.target.value.split(",").map(x=>x.trim()).filter(Boolean);if(a.length){S.areas=a;save();render()}};
+  if($("au"))$("au").onchange=async e=>{st.autostart=e.target.checked;save();await setAutostart(st.autostart)};
+  $("pn").onchange=async e=>{st.pin=e.target.checked;save();renderHead();await applyWindow()};
+  $("ex").onclick=async()=>{const data=JSON.stringify({app:"zatyshok",v:1,items:S.items,areas:S.areas},null,2);const nm="zatyshok-backup-"+todayStr()+".json";
+    if(IS_NL){try{const p=await Neutralino.os.showSaveDialog(t("exportB"),{defaultPath:nm,filters:[{name:"JSON",extensions:["json"]}]});if(p){await Neutralino.filesystem.writeFile(p.endsWith(".json")?p:p+".json",data);$("dM").textContent="✓ "+p}}catch(e){$("dM").textContent=e.message||String(e)}return}
+    const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([data],{type:"application/json"}));a.download=nm;a.click()};
+  $("redo").onclick=()=>{P.hidden=true;startWizard()};
+  $("imB").onclick=()=>$("im").click();
+  $("im").onchange=async()=>{const f=$("im").files[0];if(!f)return;try{const d=JSON.parse(await f.text());if(d.app!=="zatyshok"||!Array.isArray(d.items))throw 0;S.items=d.items;if(d.areas)S.areas=d.areas;save();render();$("dM").className="note ok";$("dM").textContent=t("importOk")}catch(e){$("dM").className="note bad";$("dM").textContent=t("importErr")}};
+  if(IS_NL){try{Neutralino.window.setDraggableRegion("dragbar2")}catch(e){}}
+}
+/* ---------- first-run setup with AI ---------- */
+const WZ={uk:{
+ howAIweb:"Підключімо ШІ-помічника? У веб-версії потрібен власний API-ключ Claude або ChatGPT (його можна взяти на console.anthropic.com чи platform.openai.com). Або спробуйте поки без ШІ — усе інше працює.",howAI:"Як ви працюєте з ШІ? Я підключаюсь до вашого звичайного чату — нічого купувати не треба.",ownKey:"Свій API-ключ (для досвідчених)",noAI:"Поки без ШІ",
+ claudeSteps:"Чудово! Три кроки:\n1. Встановіть Claude для комп’ютера і увійдіть — підходить і безкоштовний акаунт.\n2. Натисніть «Підключити до Claude» — відкриється Claude, там натисніть «Встановити».\n3. Далі просто пишіть у чаті Claude: «запиши…», «що в мене на сьогодні?», «це вже зроблено…» — і все з’являтиметься тут.",
+ codeAsk:"Ваше кодове слово або смайлик: напишете його в будь-якому чаті Claude — і справа одразу потрапить сюди. Напр.: «📌 завтра о 10 стоматолог».",getClaude:"Завантажити Claude",connectClaude:"Підключити до Claude",claudeWait:"Чекаю, поки Claude підключиться… Після встановлення відкрийте новий чат у Claude.",claudeOk:"Claude підключено ✓",
+ setupHere:"Налаштувати тут",setupInClaude:"Налаштувати в чаті з Claude",setupPhrase:"Налаштуй мій Затишок",setupInClaudeDone:"Скопіював фразу «Налаштуй мій Затишок». Вставте її в чат Claude (Ctrl+V) — він сам розпитає вас, підбере кольори, намалює наліпку й налаштує нагадування.",
+ gptSteps:"Добре! Коли захочете, щоб ChatGPT розібрав ваші справи, натисніть ✦ — я відкрию ChatGPT з готовим запитом. Скопіюйте його відповідь і натисніть 📋 — усе з’явиться в списку. Наліпку ChatGPT теж намалює у своєму чаті. Підходить будь-який акаунт ChatGPT.",
+ sClaude:"Намалює Claude",sGPT:"Згенерувати в ChatGPT",sUpload:"Завантажити свою картинку",
+ claudeStickerPhrase:"Намалюй мою наліпку для «Затишку» у стилі «{s}». (Можна прикріпити своє фото.)",copy:"Скопіювати",copied:"Скопійовано",waitSticker:"Вставте фразу в чат Claude — наліпка з’явиться тут сама",claudeDrew:"Claude намалював наліпку ✦",
+ gptWishPh:"Побажання: хто на наліпці, деталі… (необов’язково)",gptPhotoNote:"У ChatGPT можна прикріпити своє фото — наліпка буде схожа на вас. Потім збережіть картинку і завантажте сюди.",openGPT:"Відкрити ChatGPT",loadPic:"Завантажити картинку",
+ gptStickerPrompt:"Створи квадратне зображення 1024×1024: кругла наліпка-аватар у стилі «{s}», товста біла облямівка, по центру, простий фон, без тексту. Побажання: {w}. Кольори в гармонії з: {c}. Якщо я прикріплю фото — зроби персонажа схожим на мене.",
+ firstTaskClaude:"Написати Claude в чаті: «запиши…» — і подивитися, як справа з’явиться тут",
+ hi:"Привіт! Я ✦ помічник «Затишку». Допоможу налаштувати ваш нотатник за пару хвилин: підключимо ваш ШІ, створимо вашу наліпку, оберемо кольори й домовимось про нагадування.\n\nЯкою мовою вам зручніше?",
+ aiAsk:"Щоб я міг сам записувати справи, розставляти нагадування й відмічати зроблене, підключіть свій ШІ — Claude або ChatGPT.\n\nКлюч зберігається тільки на цьому комп’ютері. Я звертаюсь до вашого ШІ лише тоді, коли ви про це просите.",
+ consent:"Дозволяю помічнику надсилати мої справи у мій акаунт ШІ",connect:"Підключити",skip:"Пропустити, без ШІ",needConsent:"Поставте галочку дозволу, щоб я міг підключитися.",
+ connected:"Підключено ✓ Тепер я можу працювати разом з вами.",skipped:"Добре, поки без ШІ. Підключити можна будь-коли в ⚙.",
+ aboutAsk:"Як вас звати і чим ви займаєтесь? Розкажіть своїми словами — я підберу розділи для ваших справ.",namePh:"Ім’я",aboutPh:"Напр.: я психолог і тренерка, веду Instagram, вчу англійську…",next:"Далі",
+ sectionsSay:"Ось розділи для ваших справ. Можна змінити текст, через кому:",fits:"Підходить",
+ designAsk:"Тепер кольори. Оберіть гаму — нотатник одразу перефарбується. Або опишіть настрій, і я підберу свою палітру.",moodPh:"Напр.: спокійно, як ранок біля моря",pick:"Підібрати ✦",
+ fontAsk:"Шрифт заголовків і форма:",fElegant:"Елегантний",fModern:"Сучасний",fHand:"Рукописний",cSoft:"М’які кути",cSharp:"Строгі кути",
+ paletteMade:"Готово, ось ваша палітра «{n}».",
+ stickerAsk:"А тепер ваша наліпка — обличчя нотатника. Як створимо?",sWords:"Описати словами",sPhoto:"За моїм фото",sMono:"Простий монограм",sSkip:"Пропустити",
+ styleAsk:"Який стиль?",styles:["мальована анімація 90-х","акварель","аніме","мінімалістична іконка","3D-іграшка","олійний портрет"],
+ wordsPh:"Хто або що на наліпці? Напр.: дівчина з темним волоссям і чашкою кави, осінні листки",
+ photoNote:"Фото надсилається тільки у ваш ШІ і не зберігається у програмі. ChatGPT намалює ілюстровану наліпку, схожу на вас; Claude — векторну.",
+ photoBtn:"Обрати фото",create:"Створити ✦",more:"Ще варіанти",useThis:"Беру цю",making:"Ваш ШІ малює варіанти… це до хвилини",
+ needAIphoto:"Для наліпки за фото потрібен підключений ШІ.",pickOne:"Оберіть варіант, який подобається:",genErr:"Не вдалося створити картинку. Спробуйте ще раз або інший опис.",
+ stickerSet:"Чудово, наліпка ваша ✓",
+ rxAsk:"Як радіти зробленому? Коли ви відмічаєте справу, з’являється реакція:",habitsAsk:"Останнє — звички. Як відмічати зроблене?",dDay:"Закреслювати й лишати до кінця дня",dHide:"Одразу ховати в «Зроблено»",
+ remAsk:"Нагадувати вам?",morning:"Ранковий план о",evening:"Вечірній підсумок о",lead:"Нагадування про справу",l0:"вчасно",l10:"за 10 хв",l30:"за 30 хв",
+ autostart:"Запускати разом з комп’ютером",pin:"Тримати поверх інших вікон",done:"Готово",
+ bye:"Усе налаштовано, {n}! ✦\n\nПишіть або кажіть мені справи як завгодно — я сформулюю, розкладу по розділах і нагадаю. Клік по вашій наліпці розгортає весь список.",start:"Почати",
+ firstTask:"Написати помічнику ✦ першу справу своїми словами"},
+en:{
+ howAIweb:"Connect the AI helper? The web version needs your own Claude or ChatGPT API key (from console.anthropic.com or platform.openai.com). Or try it without AI for now — everything else works.",howAI:"How do you work with AI? I connect to your usual chat — nothing to buy.",ownKey:"My own API key (advanced)",noAI:"No AI for now",
+ claudeSteps:"Great! Three steps:\n1. Install Claude for desktop and sign in — a free account works.\n2. Click “Connect to Claude” — Claude opens, click “Install” there.\n3. Then just tell Claude in its chat: “note down…”, “what’s on today?”, “I’ve finished…” — and everything appears here.",
+ codeAsk:"Your code word or emoji: type it in any Claude chat and the task lands here right away. E.g. “📌 dentist tomorrow at 10”.",getClaude:"Download Claude",connectClaude:"Connect to Claude",claudeWait:"Waiting for Claude to connect… After installing, open a new chat in Claude.",claudeOk:"Claude connected ✓",
+ setupHere:"Set up here",setupInClaude:"Set up in the Claude chat",setupPhrase:"Set up my Zatyshok",setupInClaudeDone:"Copied “Set up my Zatyshok”. Paste it into the Claude chat (Ctrl+V) — it will ask you a few questions, pick colours, draw your sticker and set reminders.",
+ gptSteps:"Okay! Whenever you want ChatGPT to sort your tasks, press ✦ — I’ll open ChatGPT with a ready request. Copy its answer and press 📋 — it all lands in your list. ChatGPT can also draw your sticker in its chat. Any ChatGPT account works.",
+ sClaude:"Claude draws it",sGPT:"Generate in ChatGPT",sUpload:"Upload my own picture",
+ claudeStickerPhrase:"Draw my sticker for Zatyshok in “{s}” style. (You can attach your photo.)",copy:"Copy",copied:"Copied",waitSticker:"Paste the phrase into the Claude chat — the sticker appears here by itself",claudeDrew:"Claude drew your sticker ✦",
+ gptWishPh:"Wishes: who is on the sticker, details… (optional)",gptPhotoNote:"You can attach your photo in ChatGPT so the sticker looks like you. Then save the picture and upload it here.",openGPT:"Open ChatGPT",loadPic:"Upload picture",
+ gptStickerPrompt:"Create a square 1024×1024 image: a round sticker avatar in “{s}” style, thick white border, centered, plain background, no text. Wishes: {w}. Colours in harmony with: {c}. If I attach a photo, make the character look like me.",
+ firstTaskClaude:"Tell Claude in its chat: “note down…” and watch the task appear here",
+ hi:"Hi! I’m the ✦ assistant in Zatyshok. Let’s set up your notes in a couple of minutes: connect your AI, create your sticker, pick colours and agree on reminders.\n\nWhich language do you prefer?",
+ aiAsk:"To write down tasks, set reminders and tick things off for you, connect your AI — Claude or ChatGPT.\n\nThe key stays on this computer. I only contact your AI when you ask me to.",
+ consent:"I allow the assistant to send my tasks to my AI account",connect:"Connect",skip:"Skip, no AI",needConsent:"Tick the permission box so I can connect.",
+ connected:"Connected ✓ Now we can work together.",skipped:"Okay, no AI for now. You can connect it any time in ⚙.",
+ aboutAsk:"What’s your name and what do you do? Tell me in your own words and I’ll suggest sections for your tasks.",namePh:"Name",aboutPh:"E.g.: I’m a designer, I run a blog and I’m learning Spanish…",next:"Next",
+ sectionsSay:"Here are sections for your tasks. Edit them if you like, comma-separated:",fits:"Looks good",
+ designAsk:"Now colours. Pick a palette and the app recolours instantly. Or describe a mood and I’ll make your own palette.",moodPh:"E.g.: calm, like a morning by the sea",pick:"Make it ✦",
+ fontAsk:"Title font and shape:",fElegant:"Elegant",fModern:"Modern",fHand:"Handwritten",cSoft:"Soft corners",cSharp:"Sharp corners",
+ paletteMade:"Done, here is your “{n}” palette.",
+ stickerAsk:"Now your sticker — the face of your notes. How shall we make it?",sWords:"Describe it",sPhoto:"From my photo",sMono:"Simple monogram",sSkip:"Skip",
+ styleAsk:"Which style?",styles:["90s hand-drawn animation","watercolour","anime","minimal icon","3D toy","oil portrait"],
+ wordsPh:"Who or what is on the sticker? E.g.: a girl with dark hair holding coffee, autumn leaves",
+ photoNote:"Your photo is sent only to your AI and isn’t kept in the app. ChatGPT draws an illustrated look-alike sticker; Claude draws a vector one.",
+ photoBtn:"Choose photo",create:"Create ✦",more:"More options",useThis:"Use this",making:"Your AI is drawing options… up to a minute",
+ needAIphoto:"A connected AI is needed for a photo-based sticker.",pickOne:"Pick the one you like:",genErr:"Couldn’t create the image. Try again or change the description.",
+ stickerSet:"Lovely, the sticker is yours ✓",
+ rxAsk:"How should we celebrate? When you tick a task, a reaction pops up:",habitsAsk:"Last thing — habits. How should finished tasks behave?",dDay:"Cross out and keep until the end of the day",dHide:"Move to “Done” straight away",
+ remAsk:"Shall I remind you?",morning:"Morning plan at",evening:"Evening summary at",lead:"Task reminders",l0:"on time",l10:"10 min before",l30:"30 min before",
+ autostart:"Start with the computer",pin:"Keep on top of other windows",done:"Done",
+ bye:"All set, {n}! ✦\n\nTell me tasks any way you like — I’ll phrase them, file them and remind you. Click your sticker to expand the full list.",start:"Start",
+ firstTask:"Tell the ✦ assistant your first task in your own words"}};
+const w=k=>(WZ[S.settings.lang]||WZ.uk)[k];
+const WS={step:0,stickers:[],style:0,mode:null,photo:null,desc:""};
+function wizSize(on){if(!IS_NL)return;const dpr=window.devicePixelRatio||1;
+  if(on){Neutralino.window.setSize({width:Math.round(480*dpr),height:Math.round(720*dpr)}).catch(()=>{})}else{lastW=null;applyWindow()}}
+function startWizard(){
+  const Z=$("wiz");Z.hidden=false;WS.step=0;
+  Z.innerHTML=`<div class="head"><div id="dragbar3" style="flex:1;display:flex;align-items:center;gap:10px"><span class="me" style="width:34px;height:34px;font-size:16px">✦</span><div class="titles"><b style="font-size:14px">${esc(S.settings.lang==="en"?"SETUP":"НАЛАШТУВАННЯ")}</b></div></div><div class="tools"><button class="ic" id="wzMin" type="button">—</button></div></div>
+   <div class="prog"><i id="wzP" style="width:0"></i></div><div class="msgs" id="wzM"></div><div class="ctl" id="wzC"></div>`;
+  $("wzMin").onclick=()=>{if(IS_NL)Neutralino.window.minimize()};
+  if(IS_NL){try{Neutralino.window.setDraggableRegion("dragbar3")}catch(e){}}
+  wizSize(true);wStep0();
+}
+function bubble(txt,who="ai"){if(who==="me")who="mine";const m=$("wzM");const d=document.createElement("div");d.className="bub "+who;d.textContent=txt;m.appendChild(d);m.scrollTop=m.scrollHeight;return d}
+function ctl(html){$("wzC").innerHTML=html;$("wzM").scrollTop=$("wzM").scrollHeight}
+function prog(n){$("wzP").style.width=(n/6*100)+"%"}
+function busy(txt){return bubble("… "+txt)}
+/* 0 language */
+function wStep0(){prog(0);bubble(w("hi"));ctl(`<div class="chips"><button class="cp main" data-l="uk">Українська</button><button class="cp" data-l="en">English</button></div>`);
+  $("wzC").querySelectorAll("[data-l]").forEach(b=>b.onclick=()=>{S.settings.lang=b.dataset.l;localizeDefaults();save();render();bubble(b.textContent,"me");wStep1()})}
+/* 1b own API key */
+function wStepApi(){prog(1);bubble(w("aiAsk"));const st=S.settings;
+  ctl(`<div class="seg" style="margin:0"><button type="button" data-p="claude" aria-pressed="${st.provider==="claude"}">Claude</button><button type="button" data-p="openai" aria-pressed="${st.provider==="openai"}">ChatGPT</button></div>
+   <input class="i" id="wK" type="password" placeholder="${st.provider==="openai"?"sk-…":"sk-ant-…"}" value="${esc(st.provider==="openai"?st.openaiKey:st.claudeKey)}" autocomplete="off">
+   <span class="note" id="wKh">${esc(st.provider==="openai"?t("keyHelpO"):t("keyHelpC"))}</span>
+   <label class="switch" style="margin:0"><input type="checkbox" id="wCon" ${st.consentAI?"checked":""}> ${esc(w("consent"))}</label>
+   <div class="row"><button class="cp main" id="wGo">${esc(w("connect"))}</button><button class="cp" id="wSk">${esc(w("skip"))}</button><span class="note" id="wE"></span></div>`);
+  $("wzC").querySelectorAll("[data-p]").forEach(b=>b.onclick=()=>{st.provider=b.dataset.p;save();$("wzC").innerHTML="";$("wzM").lastChild.remove();wStepApi()});
+  $("wGo").onclick=async()=>{const k=$("wK").value.trim();if(!$("wCon").checked){$("wE").className="note bad";$("wE").textContent=w("needConsent");return}
+    if(st.provider==="openai")st.openaiKey=k;else st.claudeKey=k;st.consentAI=true;st.aiMode="api";save();
+    $("wE").className="note";$("wE").innerHTML='<span class="spin"></span>';
+    try{await llm('Reply with JSON {"ok":true}',"ping",20);bubble(st.provider==="openai"?"ChatGPT":"Claude","me");bubble(w("connected"));render();wStep2()}
+    catch(e){$("wE").className="note bad";$("wE").textContent=e.message}};
+  $("wSk").onclick=()=>{bubble("←","me");wStep1()};
+}
+/* 1 how the user works with AI */
+let onShared=null;
+function wStep1(){prog(1);bubble(w(IS_NL?"howAI":"howAIweb"));
+  ctl(`<div class="chips">${IS_NL?`<button class="cp main" data-c="claude">Claude</button><button class="cp main" data-c="chatgpt">ChatGPT</button>`:""}<button class="cp${IS_NL?"":" main"}" data-c="api">${esc(w("ownKey"))}</button><button class="cp" data-c="none">${esc(w("noAI"))}</button></div>`);
+  $("wzC").querySelectorAll("[data-c]").forEach(b=>b.onclick=()=>{bubble(b.textContent,"me");const c=b.dataset.c;
+    if(c==="api")return wStepApi();
+    S.settings.aiMode=c;save();render();
+    if(c==="claude")return wClaude();
+    if(c==="chatgpt"){bubble(w("gptSteps"));ctl(`<div class="row"><button class="cp main" id="wGo">${esc(w("next"))}</button></div>`);$("wGo").onclick=()=>wStep2();return}
+    bubble(w("skipped"));wStep2()});
+}
+async function openMcpb(){
+  if(!IS_NL)return;
+  const f=(NL_PATH+"/Zatyshok-for-Claude.mcpb").replace(/\//g,"\\");
+  try{await Neutralino.os.execCommand(NL_OS==="Windows"?`cmd /c start "" "${f}"`:`open "${f}"`,{background:true})}catch(e){try{await Neutralino.os.open(f)}catch(e2){}}
+}
+function wClaude(){
+  bubble(w("claudeSteps"));const st=S.settings;
+  const status=()=>st.claudeSeen?`<span class="note ok">${esc(w("claudeOk"))}</span>`:`<span class="note"><span class="spin"></span>${esc(w("claudeWait"))}</span>`;
+  ctl(`<div class="row"><button class="cp" id="wDl">1 · ${esc(w("getClaude"))}</button><button class="cp main" id="wCx">2 · ${esc(w("connectClaude"))}</button></div>
+   <div id="wSt">${status()}</div>
+   <span class="note">${esc(w("codeAsk"))}</span>
+   <div class="row"><div class="chips">${["📌","🌿","✨","⭐",S.settings.lang==="en"?"to-do":"в справи"].map(c=>`<button class="cp" data-cw="${esc(c)}" aria-pressed="${st.codeWord===c}">${esc(c)}</button>`).join("")}</div><input class="i" id="wCw" value="${esc(st.codeWord||"")}" style="width:110px" maxlength="20"></div>
+   <div class="row"><button class="cp main" id="wGo">${esc(w("setupHere"))}</button><button class="cp" id="wInC">${esc(w("setupInClaude"))}</button><button class="cp" id="wBk">←</button></div>`);
+  $("wDl").onclick=()=>openExt("https://claude.ai/download");
+  $("wzC").querySelectorAll("[data-cw]").forEach(b=>b.onclick=()=>{st.codeWord=b.dataset.cw;$("wCw").value=st.codeWord;save();$("wzC").querySelectorAll("[data-cw]").forEach(x=>x.setAttribute("aria-pressed",String(x===b)))});
+  $("wCw").oninput=e=>{st.codeWord=e.target.value.trim();save()};
+  $("wCx").onclick=openMcpb;
+  $("wBk").onclick=()=>wStep1();
+  onShared=()=>{const el=$("wSt");if(el)el.innerHTML=status()};
+  $("wGo").onclick=()=>{onShared=null;wStep2()};
+  $("wInC").onclick=async()=>{onShared=null;await copyText(w("setupPhrase"));bubble(w("setupInClaudeDone"));
+    ctl(`<div class="row"><button class="cp main" id="wFin">${esc(w("start"))}</button></div>`);$("wFin").onclick=()=>finishWizard()};
+}
+/* 2 about you → sections */
+function wStep2(){prog(2);bubble(w("aboutAsk"));
+  ctl(`<input class="i" id="wN" placeholder="${esc(w("namePh"))}" value="${esc(S.settings.name)}"><textarea class="i" id="wA" rows="3" placeholder="${esc(w("aboutPh"))}"></textarea><div class="row"><button class="cp main" id="wGo">${esc(w("next"))}</button><span class="note" id="wE"></span></div>`);
+  $("wGo").onclick=async()=>{const n=$("wN").value.trim(),a=$("wA").value.trim();S.settings.name=n;save();renderHead();
+    if(n||a)bubble([n,a].filter(Boolean).join(" — "),"me");
+    let secs=S.areas;
+    if(aiReady()&&a){$("wE").innerHTML='<span class="spin"></span>';
+      try{const lang=S.settings.lang==="en"?"English":"Ukrainian";
+        const j=JSON.parse((x=>x.slice(x.indexOf("{"),x.lastIndexOf("}")+1))(await llm(`You set up a personal to-do app. From the user's description suggest 4-6 short task sections (1-2 words each, in ${lang}); the last one must be a catch-all like "${S.settings.lang==="en"?"Other":"Інше"}". Reply JSON only: {"sections":["..."]}`,a,300)));
+        if(Array.isArray(j.sections)&&j.sections.length)secs=j.sections.map(x=>String(x).trim()).filter(Boolean).slice(0,7)}catch(e){}}
+    bubble(w("sectionsSay"));
+    ctl(`<input class="i" id="wS" value="${esc(secs.join(", "))}"><div class="row"><button class="cp main" id="wOk">${esc(w("fits"))}</button></div>`);
+    $("wOk").onclick=()=>{const v=$("wS").value.split(",").map(x=>x.trim()).filter(Boolean);if(v.length){const old=S.areas;S.areas=v;S.items.forEach(i=>{if(!v.includes(i.area))i.area=v[v.length-1]})}save();render();bubble($("wS").value,"me");wStep3()};
+  };
+}
+/* 3 design */
+function wStep3(){prog(3);bubble(w("designAsk"));
+  const L=S.settings.lang;
+  const sw=th=>`<span class="sw">${[th.card,th.gold,th.wine,th.olive].map(c=>`<i style="background:${c};box-shadow:0 0 0 1px rgba(128,128,128,.35)"></i>`).join("")}</span>`;
+  ctl(`<div class="chips">${Object.entries(THEMES).map(([k,th])=>`<button class="cp" data-t="${k}" aria-pressed="${S.settings.themeId===k}">${sw(th)}${esc(th.name[L])}</button>`).join("")}</div>
+   ${aiReady()?`<div class="row"><input class="i" id="wMood" placeholder="${esc(w("moodPh"))}" style="flex:1"><button class="cp" id="wMk">${esc(w("pick"))}</button></div>`:""}
+   <span class="note">${esc(w("fontAsk"))}</span>
+   <div class="chips"><button class="cp" data-f="elegant" style="font-family:${FONTS.elegant}" aria-pressed="${S.settings.font==="elegant"}">${esc(w("fElegant"))}</button><button class="cp" data-f="modern" style="font-family:${FONTS.modern};font-weight:700" aria-pressed="${S.settings.font==="modern"}">${esc(w("fModern"))}</button><button class="cp" data-f="hand" style="font-family:${FONTS.hand};font-size:15px" aria-pressed="${S.settings.font==="hand"}">${esc(w("fHand"))}</button>
+   <button class="cp" data-c="soft" aria-pressed="${S.settings.corners!=="sharp"}">${esc(w("cSoft"))}</button><button class="cp" data-c="sharp" aria-pressed="${S.settings.corners==="sharp"}">${esc(w("cSharp"))}</button></div>
+   <div class="row"><button class="cp main" id="wGo">${esc(w("next"))}</button><span class="note" id="wE"></span></div>`);
+  const C=$("wzC");
+  C.querySelectorAll("[data-t]").forEach(b=>b.onclick=()=>{S.settings.themeId=b.dataset.t;save();applyTheme();C.querySelectorAll("[data-t]").forEach(x=>x.setAttribute("aria-pressed",String(x===b)))});
+  C.querySelectorAll("[data-f]").forEach(b=>b.onclick=()=>{S.settings.font=b.dataset.f;save();applyTheme();C.querySelectorAll("[data-f]").forEach(x=>x.setAttribute("aria-pressed",String(x===b)))});
+  C.querySelectorAll("[data-c]").forEach(b=>b.onclick=()=>{S.settings.corners=b.dataset.c;save();applyTheme();C.querySelectorAll("[data-c]").forEach(x=>x.setAttribute("aria-pressed",String(x===b)))});
+  if($("wMk"))$("wMk").onclick=async()=>{const m=$("wMood").value.trim();if(!m)return;bubble(m,"me");$("wE").innerHTML='<span class="spin"></span>';
+    try{const j=JSON.parse((x=>x.slice(x.indexOf("{"),x.lastIndexOf("}")+1))(await llm(`You design a colour palette for a small notes app from a mood description. Ensure strong text contrast (ink vs card at least 7:1) and an accent ("gold") readable on card. Reply JSON only with hex colours: {"name":"2-3 word name in ${S.settings.lang==="en"?"English":"Ukrainian"}","bg":"#","card":"#","field":"#","ink":"#","muted":"#","faint":"#","line":"#","gold":"#","goldHi":"#","wine":"#","wineHi":"#","olive":"#"}. "wine" is the button colour (text on it uses ink), "olive" is the checkbox colour.`,m,400)));
+      const ok=["card","ink","gold","wine"].every(k=>/^#[0-9a-f]{6}$/i.test(j[k]||""));if(!ok)throw new Error("palette");
+      S.settings.customTheme=j;S.settings.themeId="custom";save();applyTheme();$("wE").textContent="";bubble(w("paletteMade").replace("{n}",j.name||"✦"))}
+    catch(e){$("wE").className="note bad";$("wE").textContent=e.message}};
+  $("wGo").onclick=()=>{bubble("✓","me");wStep4()};
+}
+/* 4 sticker */
+function wStep4(){prog(4);bubble(w("stickerAsk"));const M=mode();
+  ctl(`<div class="chips">${M==="claude"?`<button class="cp main" data-m="claude">${esc(w("sClaude"))}</button>`:""}${M==="chatgpt"?`<button class="cp main" data-m="gpt">${esc(w("sGPT"))}</button>`:""}${M==="api"?`<button class="cp main" data-m="words">${esc(w("sWords"))}</button><button class="cp main" data-m="photo">${esc(w("sPhoto"))}</button>`:""}${M==="none"?`<button class="cp main" data-m="words">${esc(w("sWords"))}</button>`:""}<button class="cp" data-m="upload">${esc(w("sUpload"))}</button><button class="cp" data-m="mono">${esc(w("sMono"))}</button><button class="cp" data-m="skip">${esc(w("sSkip"))}</button></div><input type="file" id="wUp" accept="image/*" hidden>`);
+  $("wUp").onchange=async()=>{const f=$("wUp").files[0];if(!f)return;const d=await shrink(f,720);showStickers([await toDataUrl(d).catch(()=>d)])};
+  $("wzC").querySelectorAll("[data-m]").forEach(b=>b.onclick=()=>{bubble(b.textContent,"me");WS.mode=b.dataset.m;
+    if(WS.mode==="skip")return wStep5();
+    if(WS.mode==="upload"){$("wUp").click();return}
+    if(WS.mode==="claude")return stickerClaude();
+    if(WS.mode==="gpt")return stickerGPT();
+    if(WS.mode==="mono"){const st=monogram();showStickers([st]);return}
+    if(WS.mode==="photo"&&!aiReady()){bubble(w("needAIphoto"));return}
+    stickerForm()})
+}
+function stickerForm(){
+  bubble(w("styleAsk"));
+  ctl(`<div class="chips">${w("styles").map((s,i)=>`<button class="cp" data-s="${i}" aria-pressed="${i===WS.style}">${esc(s)}</button>`).join("")}</div>
+   ${WS.mode==="photo"?`<div class="row"><button class="cp" id="wPh">📷 ${esc(w("photoBtn"))}</button><span class="note" id="wPn"></span><input type="file" id="wPf" accept="image/*" hidden></div><span class="note">${esc(w("photoNote"))}</span>`:""}
+   <textarea class="i" id="wD" rows="2" placeholder="${esc(w("wordsPh"))}"></textarea>
+   <div class="row"><button class="cp main" id="wGo">${esc(w("create"))}</button><button class="cp" id="wBack">←</button><span class="note" id="wE"></span></div>`);
+  const C=$("wzC");
+  C.querySelectorAll("[data-s]").forEach(b=>b.onclick=()=>{WS.style=+b.dataset.s;C.querySelectorAll("[data-s]").forEach(x=>x.setAttribute("aria-pressed",String(x===b)))});
+  $("wBack").onclick=()=>wStep4();
+  if($("wPh")){$("wPh").onclick=()=>$("wPf").click();$("wPf").onchange=async()=>{const f=$("wPf").files[0];if(!f)return;WS.photo=await shrink(f,768);$("wPn").textContent="✓ "+f.name}}
+  $("wGo").onclick=()=>makeStickers($("wD").value.trim());
+}
+function shrink(file,max){return new Promise((res,rej)=>{const img=new Image();img.onload=()=>{const sc=Math.min(1,max/Math.max(img.width,img.height));const c=document.createElement("canvas");c.width=Math.round(img.width*sc);c.height=Math.round(img.height*sc);c.getContext("2d").drawImage(img,0,0,c.width,c.height);res(c.toDataURL("image/jpeg",.85))};img.onerror=rej;img.src=URL.createObjectURL(file)})}
+function cleanSvg(x){const m=/<svg[\s\S]*<\/svg>/i.exec(x||"");if(!m)return null;let v=m[0];
+  v=v.replace(/<script[\s\S]*?<\/script>/gi,"").replace(/<foreignObject[\s\S]*?<\/foreignObject>/gi,"").replace(/\son\w+\s*=\s*("[^"]*"|'[^']*')/gi,"").replace(/(href|xlink:href)\s*=\s*("(?!#)[^"]*"|'(?!#)[^']*')/gi,"");
+  if(!/xmlns=/.test(v))v=v.replace(/<svg/i,'<svg xmlns="http://www.w3.org/2000/svg"');
+  return "data:image/svg+xml;base64,"+btoa(unescape(encodeURIComponent(v)))}
+function monogram(){const th=Object.assign({},THEMES.oldmoney,THEMES[S.settings.themeId]||{},S.settings.themeId==="custom"?S.settings.customTheme||{}:{});
+  const ch=esc((S.settings.name||"Я").trim().charAt(0).toUpperCase()||"Я");
+  const svg=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><circle cx="100" cy="100" r="96" fill="${th.gold}"/><circle cx="100" cy="100" r="86" fill="${th.wine}"/><circle cx="100" cy="100" r="78" fill="none" stroke="${th.gold}" stroke-width="1.5" stroke-dasharray="2 4"/><text x="100" y="128" text-anchor="middle" font-family="Georgia,serif" font-size="86" fill="${th.goldHi}">${ch}</text></svg>`;
+  return "data:image/svg+xml;base64,"+btoa(unescape(encodeURIComponent(svg)))}
+async function makeStickers(desc){
+  WS.desc=desc||WS.desc;const style=w("styles")[WS.style]||"";const st=S.settings;
+  if(WS.mode==="words"&&!WS.desc){$("wE").className="note bad";$("wE").textContent="✎";return}
+  if(WS.mode==="photo"&&!WS.photo){$("wE").className="note bad";$("wE").textContent=w("photoBtn");return}
+  if(desc)bubble(desc,"me");
+  const wait=bubble(w("making"));wait.insertAdjacentHTML("afterbegin",'<span class="spin"></span>');
+  const th=Object.assign({},THEMES.oldmoney,THEMES[st.themeId]||{},st.themeId==="custom"?st.customTheme||{}:{});
+  const colours=`main colours ${th.wine}, ${th.gold}, ${th.olive}, background ${th.card}`;
+  let opts=[];
+  try{
+    if(st.openaiKey){
+      /* ChatGPT draws real illustrated stickers (paid from the user's own OpenAI account) */
+      const prompt=`A cute round die-cut sticker avatar in ${style} style. ${WS.mode==="photo"?"Keep the person from the reference photo clearly recognisable: same face shape, hair colour and style, eye colour, glasses or freckles if present; head and shoulders, friendly expression.":"Subject: "+WS.desc+"."} ${WS.desc&&WS.mode==="photo"?"Extra wishes: "+WS.desc+".":""} Harmonious palette with ${colours}. Thick white sticker border, centered, transparent background, no text.`;
+      const body={model:st.openaiImageModel||"gpt-image-2",prompt,size:"1024x1024",quality:"medium",background:"transparent",output_format:"png",n:2};
+      let url="https://api.openai.com/v1/images/generations";
+      if(WS.mode==="photo"){url="https://api.openai.com/v1/images/edits";body.images=[{image_url:WS.photo}]}
+      const r=await fetch(url,{method:"POST",headers:{"content-type":"application/json","authorization":"Bearer "+st.openaiKey},body:JSON.stringify(body)});
+      const j=await r.json().catch(()=>({}));if(!r.ok)throw new Error(j?.error?.message||("HTTP "+r.status));
+      opts=(j.data||[]).filter(d=>d.b64_json).map(d=>"data:image/png;base64,"+d.b64_json);
+      opts=await Promise.all(opts.map(u=>toDataUrl(u).catch(()=>u)));
+    }else if(st.claudeKey){
+      /* Claude draws vector stickers itself */
+      const one=v=>llm(`You are an illustrator who draws stickers as SVG code. Draw ONE round sticker avatar in ${style} style, interpreted as a detailed flat vector illustration (soft gradients, shading, clean outlines). ${WS.mode==="photo"?"Base it on the person in the photo: match hair colour/length/style, eye colour, glasses, freckles, clothing colour and expression. Do not include any names or text.":"Subject: "+WS.desc}. ${WS.mode==="photo"&&WS.desc?"Extra wishes: "+WS.desc:""} Use a palette harmonious with ${colours}. Thick white circular sticker border with a soft drop shadow. Variation: ${v}.
+Output ONLY the SVG: <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400">…</svg>. No text elements, no external images or links, no scripts. Keep it under 14 KB.`,WS.mode==="photo"?"(see photo)":WS.desc,7000,WS.mode==="photo"&&WS.photo?[WS.photo]:[],false);
+      const res=await Promise.allSettled([one("version A, slightly closer portrait"),one("version B, a bit more playful with a small decorative element")]);
+      opts=res.filter(x=>x.status==="fulfilled").map(x=>cleanSvg(x.value)).filter(Boolean);
+      opts=await Promise.all(opts.map(u=>toDataUrl(u).catch(()=>u)));
+    }else{
+      /* no AI connected: free generator from the text description */
+      const seed=()=>Math.floor(Math.random()*1e9);
+      const u=sd=>`https://image.pollinations.ai/prompt/${encodeURIComponent(`${WS.desc}, ${style}, round sticker, white die-cut border, centered, plain background`)}?width=512&height=512&nologo=true&model=flux&seed=${sd}`;
+      opts=(await Promise.all([u(seed()),u(seed())].map(x=>toDataUrl(x).catch(()=>null)))).filter(Boolean);
+    }
+  }catch(e){wait.remove();bubble(w("genErr")+"\n"+(e.message||e));return}
+  wait.remove();
+  if(!opts.length){bubble(w("genErr"));return}
+  showStickers(opts);
+}
+function toDataUrl(u){return new Promise((res,rej)=>{const img=new Image();img.crossOrigin="anonymous";const tm=setTimeout(()=>rej(new Error("timeout")),70000);
+  img.onload=()=>{clearTimeout(tm);try{const c=document.createElement("canvas");c.width=c.height=360;const g=c.getContext("2d");const sc=Math.min(360/img.width,360/img.height);g.drawImage(img,(360-img.width*sc)/2,(360-img.height*sc)/2,img.width*sc,img.height*sc);res(c.toDataURL("image/png"))}catch(e){res(u)}};
+  img.onerror=()=>{clearTimeout(tm);rej(new Error("load"))};img.src=u})}
+function showStickers(list){
+  WS.stickers=list;let sel=0;bubble(w("pickOne"));
+  ctl(`<div class="stk">${list.map((u,i)=>`<button type="button" data-k="${i}" aria-pressed="${i===0}"><img src="${u}" alt=""></button>`).join("")}</div>
+   <div class="row"><button class="cp main" id="wUse">${esc(w("useThis"))}</button>${WS.mode==="mono"?"":`<button class="cp" id="wMore">${esc(w("more"))}</button>`}<button class="cp" id="wBack">←</button></div>`);
+  $("wzC").querySelectorAll("[data-k]").forEach(b=>b.onclick=()=>{sel=+b.dataset.k;$("wzC").querySelectorAll("[data-k]").forEach(x=>x.setAttribute("aria-pressed",String(x===b)))});
+  if($("wMore"))$("wMore").onclick=()=>makeStickers("");
+  $("wBack").onclick=()=>wStep4();
+  $("wUse").onclick=async()=>{let u=list[sel];if(u.startsWith("data:image/svg"))u=await toDataUrl(u).catch(()=>u);S.settings.sticker=u;save();renderHead();bubble(w("stickerSet"));wStep5()};
+}
+function styleChips(){return `<div class="chips">${w("styles").map((s,i)=>`<button class="cp" data-s="${i}" aria-pressed="${i===WS.style}">${esc(s)}</button>`).join("")}</div>`}
+function bindStyle(after){$("wzC").querySelectorAll("[data-s]").forEach(b=>b.onclick=()=>{WS.style=+b.dataset.s;$("wzC").querySelectorAll("[data-s]").forEach(x=>x.setAttribute("aria-pressed",String(x===b)));after&&after()})}
+function stickerClaude(){
+  bubble(w("styleAsk"));const before=S.settings.sticker;
+  const phrase=()=>w("claudeStickerPhrase").replace("{s}",w("styles")[WS.style]);
+  ctl(`${styleChips()}<div class="bub ai" id="wPhr" style="max-width:100%">${esc(phrase())}</div>
+   <div class="row"><button class="cp main" id="wCp">${esc(w("copy"))}</button><button class="cp" id="wBk">←</button><span class="note" id="wE"><span class="spin"></span>${esc(w("waitSticker"))}</span></div>`);
+  bindStyle(()=>{$("wPhr").textContent=phrase()});
+  $("wCp").onclick=async()=>{const ok=await copyText(phrase());$("wCp").textContent=ok?"✓ "+w("copied"):w("copy")};
+  $("wBk").onclick=()=>{onShared=null;wStep4()};
+  onShared=()=>{if(S.settings.sticker&&S.settings.sticker!==before){onShared=null;bubble(w("claudeDrew"));showStickers([S.settings.sticker])}};
+}
+function stickerGPT(){
+  bubble(w("styleAsk"));
+  ctl(`${styleChips()}<textarea class="i" id="wD" rows="2" placeholder="${esc(w("gptWishPh"))}"></textarea><span class="note">${esc(w("gptPhotoNote"))}</span>
+   <div class="row"><button class="cp main" id="wOpen">1 · ${esc(w("openGPT"))}</button><button class="cp main" id="wLoad">2 · ${esc(w("loadPic"))}</button><button class="cp" id="wBk">←</button></div><input type="file" id="wUp2" accept="image/*" hidden>`);
+  bindStyle();
+  $("wBk").onclick=()=>wStep4();
+  $("wOpen").onclick=()=>{const th=Object.assign({},THEMES.oldmoney,THEMES[S.settings.themeId]||{},S.settings.themeId==="custom"?S.settings.customTheme||{}:{});
+    const q=w("gptStickerPrompt").replace("{s}",w("styles")[WS.style]).replace("{w}",$("wD").value.trim()||"-").replace("{c}",`${th.wine}, ${th.gold}, ${th.olive}, ${th.card}`);
+    openExt("https://chatgpt.com/?q="+encodeURIComponent(q))};
+  $("wLoad").onclick=()=>$("wUp2").click();
+  $("wUp2").onchange=async()=>{const f=$("wUp2").files[0];if(!f)return;const d=await shrink(f,720);showStickers([await toDataUrl(d).catch(()=>d)])};
+}
+function finishWizard(){const st=S.settings;st.onboarded=true;onShared=null;
+  S.items=S.items.filter(i=>!Object.values(EX).flat().includes(i.text));
+  if(!S.items.length)S.items.push({id:uid(),text:w(mode()==="claude"?"firstTaskClaude":"firstTask"),area:S.areas[S.areas.length-1],done:false,today:todayStr(),createdAt:now(),by:"ai"});
+  st.expanded=false;save();$("wiz").hidden=true;wizSize(false);render();if(IS_NL){try{Neutralino.window.setDraggableRegion("dragbar")}catch(e){}}}
+/* 5 habits */
+function wStep5(){prog(5);bubble(w("habitsAsk"));const st=S.settings;
+  ctl(`<div class="chips"><button class="cp" data-d="day" aria-pressed="${st.doneMode!=="hide"}">${esc(w("dDay"))}</button><button class="cp" data-d="hide" aria-pressed="${st.doneMode==="hide"}">${esc(w("dHide"))}</button></div>
+   <span class="note">${esc(w("rxAsk"))}</span>
+   <div class="chips">${["cute","sport","nature","calm","off"].map(k=>`<button class="cp" data-x="${k}" aria-pressed="${(st.reactions||"cute")===k}">${k==="off"?"":PACKS[k].slice(0,3).join("")+" "}${esc(t("rxNames")[k])}</button>`).join("")}</div>
+   <span class="note">${esc(w("remAsk"))}</span>
+   <label class="switch" style="margin:0"><input type="checkbox" id="wMo" ${st.morning?"checked":""}> ${esc(w("morning"))} <input class="i" type="time" id="wMt" value="${st.morning||"09:00"}" style="width:110px;padding:3px 6px"></label>
+   <label class="switch" style="margin:0"><input type="checkbox" id="wEv" ${st.evening?"checked":""}> ${esc(w("evening"))} <input class="i" type="time" id="wEt" value="${st.evening||"21:00"}" style="width:110px;padding:3px 6px"></label>
+   <div class="row"><span class="note">${esc(w("lead"))}:</span><div class="chips">${[0,10,30].map(m=>`<button class="cp" data-r="${m}" aria-pressed="${(st.remindLead||0)===m}">${esc(w("l"+m))}</button>`).join("")}</div></div>
+   ${IS_NL&&NL_OS==="Windows"?`<label class="switch" style="margin:0"><input type="checkbox" id="wAu" ${st.autostart?"checked":""}> ${esc(w("autostart"))}</label>`:""}
+   <label class="switch" style="margin:0"><input type="checkbox" id="wPi" ${st.pin?"checked":""}> ${esc(w("pin"))}</label>
+   <div class="row"><button class="cp main" id="wGo">${esc(w("done"))}</button></div>`);
+  const C=$("wzC");
+  C.querySelectorAll("[data-d]").forEach(b=>b.onclick=()=>{st.doneMode=b.dataset.d;C.querySelectorAll("[data-d]").forEach(x=>x.setAttribute("aria-pressed",String(x===b)))});
+  C.querySelectorAll("[data-x]").forEach(b=>b.onclick=()=>{st.reactions=b.dataset.x;C.querySelectorAll("[data-x]").forEach(x=>x.setAttribute("aria-pressed",String(x===b)));if(pack())celebrate(b,pack()[0],false)});
+  C.querySelectorAll("[data-r]").forEach(b=>b.onclick=()=>{st.remindLead=+b.dataset.r;C.querySelectorAll("[data-r]").forEach(x=>x.setAttribute("aria-pressed",String(x===b)))});
+  $("wGo").onclick=async()=>{st.morning=$("wMo").checked?$("wMt").value:"";st.evening=$("wEv").checked?$("wEt").value:"";st.pin=$("wPi").checked;
+    if($("wAu")){st.autostart=$("wAu").checked;await setAutostart(st.autostart)}
+    save();bubble("✓","me");wStep6()};
+}
+/* 6 finish */
+function wStep6(){prog(6);const st=S.settings;
+  bubble(w("bye").replace("{n}",st.name||"✦"));
+  ctl(`<div class="row"><button class="cp main" id="wGo">${esc(w("start"))}</button></div>`);
+  $("wGo").onclick=()=>finishWizard();
+}
+/* ---------- boot ---------- */
+async function singleInstance(){
+  if(!IS_NL)return true;
+  try{const raw=await Neutralino.storage.getData("lock");const l=JSON.parse(raw);if(l&&l.pid!==NL_PID&&Date.now()-l.ts<5000){return false}}catch(e){}
+  const beat=async()=>{try{await Neutralino.storage.setData("lock",JSON.stringify({pid:NL_PID,ts:Date.now()}))}catch(e){}};
+  await beat();setInterval(beat,2000);return true;
+}
+(async()=>{
+  if(!(await singleInstance())){try{Neutralino.app.exit()}catch(e){}return}
+  await load();if(carryOver())save();applyTheme();render();
+  if(!S.settings.onboarded)setTimeout(startWizard,300);
+  if(IS_NL){
+    try{await Neutralino.window.setDraggableRegion("dragbar")}catch(e){}
+    Neutralino.events.on("windowClose",async()=>{await saveNow();await releaseLock();Neutralino.app.exit()});
+    await applyWindow();
+    try{
+      const dpr=window.devicePixelRatio||1, SW=Math.round(screen.availWidth*dpr), SH=Math.round(screen.availHeight*dpr);
+      const w=Math.round((S.settings.expanded?SIZE.expanded:SIZE.compact).width*dpr);
+      const pos=S.settings.pos;
+      if(pos&&typeof pos.x==="number"&&pos.x>-50&&pos.x<SW-80&&pos.y>-20&&pos.y<SH-80){await Neutralino.window.move(Math.max(0,Math.min(pos.x,SW-w)),pos.y)}
+      else{await Neutralino.window.move(Math.max(0,SW-w-Math.round(24*dpr)),Math.round(60*dpr))}
+    }catch(e){}
+    setInterval(async()=>{try{const z=await Neutralino.window.getSize();const dpr=window.devicePixelRatio||1;const k=S.settings.expanded?"e":"c";const w=Math.round(z.width/dpr),h=Math.round(z.height/dpr);const o=(S.settings.sizes||{})[k]||(S.settings.expanded?SIZE.expanded:SIZE.compact);if(lastW&&(Math.abs(w-o.width)>4||Math.abs(h-o.height)>4)){S.settings.sizes=S.settings.sizes||{};S.settings.sizes[k]={width:w,height:h};lastW=z.width;save()}}catch(e){}},2500);
+    setInterval(async()=>{try{const p=await Neutralino.window.getPosition();const o=S.settings.pos||{};if(p&&(p.x!==o.x||p.y!==o.y)){S.settings.pos={x:p.x,y:p.y};save()}}catch(e){}},3000);
+  }
+  checkReminders();setInterval(checkReminders,20000);setInterval(pollShared,1500);
+  let day=todayStr();setInterval(()=>{if(todayStr()!==day){day=todayStr();if(carryOver())save();render()}},60000);
+})();
+</script>
+
+</body>
+</html>
